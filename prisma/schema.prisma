@@ -1,0 +1,98 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Supplier {
+  id          String    @id @default(uuid()) @db.VarChar(36)
+  alternateId Int       @unique @db.Integer
+  createdAt   DateTime  @default(now()) @db.Date
+  document    String    @unique @db.VarChar(14)
+  tradeName   String    @db.VarChar(255)
+  companyName String    @db.VarChar(255)
+  phone       String    @db.VarChar(11)
+  email       String    @db.VarChar(36)
+  products    Product[]
+  orders      Order[]
+
+  @@map("suppliers")
+}
+
+model Product {
+  id          String     @id @default(uuid()) @db.VarChar(36)
+  alternateId Int        @unique @db.Integer
+  createdAt   DateTime   @default(now()) @db.Date
+  description String     @db.VarChar(255)
+  price       Decimal    @default(0) @db.Money
+  supplierId  String     @db.VarChar(36)
+  supplier    Supplier   @relation(fields: [supplierId], references: [id])
+  inventory   Inventory?
+
+  @@map("products")
+}
+
+model Inventory {
+  id          String   @id @default(uuid()) @db.VarChar(36)
+  alternateId Int      @unique @db.Integer
+  createdAt   DateTime @default(now()) @db.Date
+  quantity    Int      @default(0) @db.Integer
+  productId   String   @unique @db.VarChar(36)
+  product     Product  @relation(fields: [productId], references: [id])
+
+  @@map("inventories")
+}
+
+model Order {
+  id            String      @id @default(uuid()) @db.VarChar(36)
+  alternateId   Int         @unique @db.Integer
+  createdAt     DateTime    @default(now()) @db.Date
+  quantity      Int         @db.Integer
+  totalValue    Decimal     @db.Money
+  arrivalData   DateTime    @db.Date
+  supplierId    String      @db.VarChar(36)
+  totalOrdersId String      @db.VarChar(36)
+  supplier      Supplier    @relation(fields: [supplierId], references: [id])
+  totalOrders   TotalOrders @relation(fields: [totalOrdersId], references: [id])
+
+  @@map("orders")
+}
+
+model TotalOrders {
+  id          String   @id @default(uuid()) @db.VarChar(36)
+  alternateId Int      @unique @db.Integer
+  createdAt   DateTime @default(now()) @db.Date
+  quantity    Int      @db.Integer
+  totalValue  Decimal  @db.Money
+  arrivalData DateTime @db.Date
+  orders      Order[]
+
+  @@map("total_orders")
+}
+
+model Sale {
+  id           String     @id @default(uuid()) @db.VarChar(36)
+  alternateId  Int        @unique @db.Integer
+  createdAt    DateTime   @default(now()) @db.Date
+  quantity     Int        @db.Integer
+  totalValue   Decimal    @db.Money
+  totalSalesId String     @db.VarChar(36)
+  totalSales   TotalSales @relation(fields: [totalSalesId], references: [id])
+
+  @@map("sales")
+}
+
+model TotalSales {
+  id          String   @id @default(uuid()) @db.VarChar(36)
+  alternateId Int      @unique @db.Integer
+  createdAt   DateTime @default(now()) @db.Date
+  quantity    Int      @db.Integer
+  totalValue  Decimal  @db.Money
+  sales       Sale[]
+
+  @@map("total_sales")
+}
