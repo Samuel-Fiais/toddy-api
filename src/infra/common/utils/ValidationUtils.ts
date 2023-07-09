@@ -28,8 +28,8 @@ export class ValidationUtils<T> {
 		const schemaId: yup.Schema = yup.object({
 			id: yup
 				.string()
-				.uuid()
-				.required("The 'id' param is required."),	
+				.uuid("O campo 'id' deve ser um UUID válido")
+				.required("O campo 'id' é obrigatório."),	
 		});
 
 		const objectId = {

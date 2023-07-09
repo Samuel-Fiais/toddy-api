@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { SupplierRepository } from 'src/infra/repositories/supplier.repository';
-import { SupplierModel } from '../../../domain/model/supplier.model';
-import { CreateSupplierDTO } from '../supplier.dto';
+import { SupplierModel } from '../../domain/model/supplier.model';
+import { CreateSupplierDTO } from './supplier.dto';
 import { ExceptionService } from 'src/infra/exceptions/exception.service';
 import { LoggerService } from 'src/infra/logger/logger.service';
 import { ValidationUtils } from 'src/infra/common/utils/ValidationUtils';
-import { createSupplierSchema } from '../supplierSchemas';
+import { createSupplierSchema } from './supplierSchemas';
 
 @Injectable()
 export class createSupplierUseCase {

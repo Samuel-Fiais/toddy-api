@@ -12,8 +12,8 @@ export class ExceptionService implements IException {
 		throw { message: ExceptionMessages.INTERNAL_SERVER_ERROR }
 	}
 
-	applicationNotFound(entity: string): void {
-		throw { message: `${ExceptionMessages.NOT_FOUND} : ${entity}` }
+	applicationNotFound(entity: string, id: string = 'all'): void {
+		throw { message: `${ExceptionMessages.NOT_FOUND} : ${entity} : ${id}` }
 	}
 
 	applicationError(error: Error) {

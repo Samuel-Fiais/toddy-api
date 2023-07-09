@@ -31,7 +31,7 @@ export class BaseRepository<T> implements IBaseRepository<T> {
 			return true;
 		} catch (e) {
 			this.logger.error(`BaseRepository<${this._modelName}> create`, `Error to create a new ${this._modelName}`, e)
-			throw new ExceptionService().applicationOperationCreateRepository(this._modelName)
+			new ExceptionService().applicationOperationCreateRepository(this._modelName)
 		}
 	}
 	
@@ -59,20 +59,26 @@ export class BaseRepository<T> implements IBaseRepository<T> {
 	
 	async findAll(): Promise<T[]> {
 		try {
-			const entities = await this._prisma[this._modelName].findMany();
-			return entities;
+			const entities = await this._prisma[this._modelName].findMany()
+
+			return entities
 		} catch (e) {
 			this.logger.error(`BaseRepository<${this._modelName}> findAll`, `Error to find all ${this._modelName}`, e)
-			throw new ExceptionService().applicationOperationFindRepository(this._modelName)
+			new ExceptionService().applicationOperationFindRepository(this._modelName)
 		}
 	}
 	
 	async findById(id: string): Promise<T> {
-		const entity = await this._prisma[this._modelName].findUnique({
-			where: { id },
-		});
-
-		return entity;
+		try {
+			const entity = await this._prisma[this._modelName].findUnique({
+				where: { id },
+			});
+	
+			return entity;
+		} catch (e) {
+			this.logger.error(`BaseRepository<${this._modelName}> findById`, `Error to find a ${this._modelName} by id`, e)
+			new ExceptionService().applicationOperationFindRepository(this._modelName)
+		}
 	}
 	
 	async find(filter: (item: T) => boolean): Promise<T[]> {
