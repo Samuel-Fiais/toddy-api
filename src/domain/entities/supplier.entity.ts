@@ -1,9 +1,7 @@
 import { Product } from "./product.entity";
+import { Base } from "./base.entity";
 
-export class Supplier {
-	id: string;
-	alternateId: number;
-	createdAt: Date;
+export class Supplier extends Base {
 	document: string;
 	tradeName: string;
 	companyName: string;

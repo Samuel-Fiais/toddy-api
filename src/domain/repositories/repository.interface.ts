@@ -1,5 +1,5 @@
 export interface IBaseRepository<T> {
-	create(entity: T): Promise<boolean>
+	create(entity: T): Promise<T>
 	update(entity: T): Promise<boolean>
 	delete(id: string): Promise<boolean>
 	findAll(): Promise<T[]>

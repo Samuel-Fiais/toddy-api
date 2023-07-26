@@ -1,7 +1,7 @@
-import { Injectable, LoggerService } from "@nestjs/common";
-import { IBaseRepository } from "src/domain/repositories/repository.interface";
-import { PrismaService } from "../database/prisma.service";
-import { ExceptionService } from "../exceptions/exception.service";
+import {Injectable, LoggerService} from "@nestjs/common";
+import {IBaseRepository} from "src/domain/repositories/repository.interface";
+import {PrismaService} from "../database/prisma.service";
+import {ExceptionService} from "../exceptions/exception.service";
 
 @Injectable()
 export class BaseRepository<T> implements IBaseRepository<T> {
@@ -11,7 +11,7 @@ export class BaseRepository<T> implements IBaseRepository<T> {
 		protected logger: LoggerService
 	) {}
 
-	async create(entity: T): Promise<boolean> {
+	async create(entity: T): Promise<T> {
 		try {
 			const lastElement = await this._prisma[this._modelName].findFirst({
 				orderBy: {
@@ -22,13 +22,9 @@ export class BaseRepository<T> implements IBaseRepository<T> {
 			if (!lastElement) entity['alternateId'] = 1
 			else  entity['alternateId'] = lastElement['alternateId'] + 1
 	
-			const createdEntity = await this._prisma[this._modelName].create({
+			return await this._prisma[this._modelName].create({
 				data: entity
-			});
-		
-			if (!createdEntity) return false;
-		
-			return true;
+			})
 		} catch (e) {
 			this.logger.error(`BaseRepository<${this._modelName}> create`, `Error to create a new ${this._modelName}`, e)
 			new ExceptionService().applicationOperationCreateRepository(this._modelName)
@@ -36,50 +32,57 @@ export class BaseRepository<T> implements IBaseRepository<T> {
 	}
 	
 	async update(entity: T): Promise<boolean> {
-		const id = entity['id'];
-		const updatedEntity = await this._prisma[this._modelName].update({
-			where: { id },
-			data: entity,
-		});
-	
-		if (!updatedEntity) return false;
-	
-		return true;
+		try {
+			const id = entity['id'];
+			return await this._prisma[this._modelName].update({
+				where: {id},
+				data: entity,
+			});
+		} catch (e) {
+			this.logger.error(`BaseRepository<${this._modelName}> update`, `Error to update a ${this._modelName}`, e)
+			new ExceptionService().applicationOperationUpdateRepository(this._modelName)
+		}
 	}
 	
 	async delete(id: string): Promise<boolean> {
-		const deletedEntity = await this._prisma[this._modelName].delete({
-			where: { id },
-		});
-	
-		if (!deletedEntity) return false;
-	
-		return true;
+		try {
+			return await this._prisma[this._modelName].delete({
+				where: {id},
+			});
+		} catch (e) {
+			this.logger.error(`BaseRepository<${this._modelName}> delete`, `Error to delete a ${this._modelName}`, e)
+			new ExceptionService().applicationOperationDeleteRepository(this._modelName)
+		}
 	}
 	
 	async findAll(): Promise<T[]> {
 		try {
-			const entities = await this._prisma[this._modelName].findMany()
-
-			return entities
+			return await this._prisma[this._modelName].findMany()
 		} catch (e) {
 			this.logger.error(`BaseRepository<${this._modelName}> findAll`, `Error to find all ${this._modelName}`, e)
 			new ExceptionService().applicationOperationFindRepository(this._modelName)
 		}
 	}
 	
-	async findById(id: string): Promise<T> {
+	async findById(id: string, includeRelations?: string[]): Promise<T> {
 		try {
-			const entity = await this._prisma[this._modelName].findUnique({
+			const query = {
 				where: { id },
-			});
+			};
 	
-			return entity;
+			if (includeRelations && includeRelations.length > 0) {
+				query['include'] = {};
+				includeRelations.forEach((relation) => {
+					query['include'][relation] = true;
+				});
+			}
+	
+			return await this._prisma[this._modelName].findUnique(query);
 		} catch (e) {
-			this.logger.error(`BaseRepository<${this._modelName}> findById`, `Error to find a ${this._modelName} by id`, e)
-			new ExceptionService().applicationOperationFindRepository(this._modelName)
+			this.logger.error(`BaseRepository<${this._modelName}> findById`, `Error to find a ${this._modelName} by id`, e);
+			new ExceptionService().applicationOperationFindRepository(this._modelName);
 		}
-	}
+	}	
 	
 	async find(filter: (item: T) => boolean): Promise<T[]> {
 		const entities = await this._prisma[this._modelName].findMany();

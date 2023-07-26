@@ -33,6 +33,14 @@ export class ExceptionService implements IException {
 		throw { message: `${ExceptionMessages.OPERATION_CREATE_REPOSITORY} : ${entity}` }
 	}
 
+	applicationOperationUpdateRepository(entity: string) {
+        throw { message: `${ExceptionMessages.OPERATION_UPDATE_REPOSITORY} : ${entity}` }
+    }
+
+	applicationOperationDeleteRepository(entity: string) {
+		throw { message: `${ExceptionMessages.OPERATION_DELETE_REPOSITORY} : ${entity}` }
+	}
+
 	applicationOperationFindRepository(entity: string) {
 		throw { message: `${ExceptionMessages.OPERATION_FIND_REPOSITORY} : ${entity}` }
 	}

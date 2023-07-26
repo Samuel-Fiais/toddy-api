@@ -24,14 +24,15 @@ model Supplier {
 }
 
 model Product {
-  id          String     @id @default(uuid()) @db.VarChar(36)
-  alternateId Int        @unique @db.Integer
-  createdAt   DateTime   @default(now()) @db.Date
-  description String     @db.VarChar(255)
-  price       Decimal    @default(0) @db.Money
-  supplierId  String     @db.VarChar(36)
-  supplier    Supplier   @relation(fields: [supplierId], references: [id])
+  id          String      @id @default(uuid()) @db.VarChar(36)
+  alternateId Int         @unique @db.Integer
+  createdAt   DateTime    @default(now()) @db.Date
+  description String      @db.VarChar(255)
+  price       Decimal     @default(0) @db.Money
+  supplierId  String      @db.VarChar(36)
+  supplier    Supplier    @relation(fields: [supplierId], references: [id])
   inventory   Inventory?
+  orderItens  OrderItem[]
 
   @@map("products")
 }
@@ -47,31 +48,32 @@ model Inventory {
   @@map("inventories")
 }
 
-model Order {
-  id            String      @id @default(uuid()) @db.VarChar(36)
-  alternateId   Int         @unique @db.Integer
-  createdAt     DateTime    @default(now()) @db.Date
-  quantity      Int         @db.Integer
-  totalValue    Decimal     @db.Money
-  arrivalData   DateTime    @db.Date
-  supplierId    String      @db.VarChar(36)
-  totalOrdersId String      @db.VarChar(36)
-  supplier      Supplier    @relation(fields: [supplierId], references: [id])
-  totalOrders   TotalOrders @relation(fields: [totalOrdersId], references: [id])
-
-  @@map("orders")
-}
-
-model TotalOrders {
+model OrderItem {
   id          String   @id @default(uuid()) @db.VarChar(36)
   alternateId Int      @unique @db.Integer
   createdAt   DateTime @default(now()) @db.Date
   quantity    Int      @db.Integer
   totalValue  Decimal  @db.Money
-  arrivalData DateTime @db.Date
-  orders      Order[]
+  productId   String   @db.VarChar(36)
+  product     Product  @relation(fields: [productId], references: [id])
+  orderId     String   @db.VarChar(36)
+  order       Order    @relation(fields: [orderId], references: [id])
 
-  @@map("total_orders")
+  @@map("order_items")
+}
+
+model Order {
+  id          String      @id @default(uuid()) @db.VarChar(36)
+  alternateId Int         @unique @db.Integer
+  createdAt   DateTime    @default(now()) @db.Date
+  quantity    Int         @db.Integer
+  totalValue  Decimal     @db.Money
+  arrivalData DateTime    @db.Date
+  supplierId  String      @db.VarChar(36)
+  supplier    Supplier    @relation(fields: [supplierId], references: [id])
+  orderItens  OrderItem[]
+
+  @@map("orders")
 }
 
 model Sale {

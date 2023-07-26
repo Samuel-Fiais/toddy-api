@@ -1,9 +1,12 @@
 ﻿import { Base } from "./base.entity";
-import { Order } from "./order.entity";
+import { Supplier } from "./supplier.entity";
 
-export class TotalOrders extends Base {
+export class Order extends Base {
     quantity: number;
     totalValue: number;
     arrivalDate: Date;
-    orders: Order[];
+    
+    suplierId: string;
+    suplier: Supplier;
+    orderItems: Order[];
 }

@@ -7,7 +7,7 @@ export interface IException {
 	applicationValuesRequisitionInvalid(entity: string, yupErrors: Record<string, string>)
 
 	applicationOperationCreateRepository(entity: string)
-	// applicationOperationUpdateRepository(entity: string)
-	// applicationOperationDeleteRepository(entity: string)
+	applicationOperationUpdateRepository(entity: string)
+	applicationOperationDeleteRepository(entity: string)
 	applicationOperationFindRepository(entity: string)
 }

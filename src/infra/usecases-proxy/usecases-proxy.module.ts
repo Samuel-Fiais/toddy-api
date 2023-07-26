@@ -6,8 +6,10 @@ import { SupplierRepository } from "../repositories/supplier.repository";
 import { UseCaseProxy } from "./usecases-proxy";
 import { createSupplierUseCase } from "src/usecases/supplier/create.supplier.usecase";
 import { LoggerService } from "../logger/logger.service";
-import { getAllSupplierUseCase } from "src/usecases/supplier/getAll.supplier.usecase";
-import { getByIdSupplierUseCase } from "src/usecases/supplier/getbyid.supplier.usecase";
+import { getAllSupplierUseCase } from "src/usecases/supplier/get-all.supplier.usecase";
+import { getByIdSupplierUseCase } from "src/usecases/supplier/get-by-id.supplier.usecase";
+import { updateSupplierUseCase } from "src/usecases/supplier/update.supplier.usecase";
+import { deleteSupplierUseCase } from "src/usecases/supplier/delete.supplier.usecase";
 
 @Module({
 	imports: [LoggerModule, RepositoriesModule, ExceptionsModule]
@@ -40,12 +42,26 @@ export class UseCaseProxyModule {
 					provide: UseCaseProxyModule.POST_SUPPLIER_USECASES_PROXY,
 					useFactory: (logger: LoggerService, supplierRepository: SupplierRepository) => new UseCaseProxy(
 						new createSupplierUseCase(logger, supplierRepository)),
+				},
+				{
+					inject: [LoggerService, SupplierRepository],
+                    provide: UseCaseProxyModule.PUT_SUPPLIER_USECASES_PROXY,
+                    useFactory: (logger: LoggerService, supplierRepository: SupplierRepository) => new UseCaseProxy(
+                        new updateSupplierUseCase(logger, supplierRepository)),
+				},
+				{
+					inject: [LoggerService, SupplierRepository],
+					provide: UseCaseProxyModule.DELETE_SUPPLIER_USECASES_PROXY,
+					useFactory: (logger: LoggerService, supplierRepository: SupplierRepository) => new UseCaseProxy(
+						new deleteSupplierUseCase(logger, supplierRepository)),
 				}
 			],
 			exports: [
 				UseCaseProxyModule.GET_SUPPLIER_USECASES_PROXY,
 				UseCaseProxyModule.GET_SUPPLIERS_USECASES_PROXY,
 				UseCaseProxyModule.POST_SUPPLIER_USECASES_PROXY,
+				UseCaseProxyModule.PUT_SUPPLIER_USECASES_PROXY,
+                UseCaseProxyModule.DELETE_SUPPLIER_USECASES_PROXY
 			]
 		}
 	}

@@ -16,7 +16,7 @@ export class getByIdSupplierUseCase {
 		
 		if (hasErrorValidation) new ExceptionService().applicationValuesRequisitionInvalid('Fornecedor', hasErrorValidation)
 
-		const entity = await this._supplierRepository.findById(id)
+		const entity = await this._supplierRepository.findById(id, ['products'])
 		if (!entity) new ExceptionService().applicationNotFound('suppliers', id)
 		
 		const presenter = GetSupplierPresenter.mapper(entity)

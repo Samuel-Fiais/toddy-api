@@ -1,4 +1,4 @@
-import { SupplierModel } from "src/domain/model/supplier.model"
+import { Supplier } from "src/domain/entities/supplier.entity"
 
 export class GetSupplierPresenter {
 	id: string
@@ -10,18 +10,24 @@ export class GetSupplierPresenter {
 	phone: string
 	email: string
 
-	constructor(model: SupplierModel) {
-		this.id = model.id
-		this.alternateId = model.alternateId
-		this.createdAt = model.createdAt
-		this.document = model.document
-		this.tradeName = model.tradeName
-		this.companyName = model.companyName
-		this.phone = model.phone
-		this.email = model.email
+	static mapper = (entity: Supplier) => {
+		const model = new GetSupplierPresenter()
+		model.id = entity.id
+		model.alternateId = entity.alternateId
+		model.createdAt = entity.createdAt
+		model.document = entity.document
+		model.tradeName = entity.tradeName
+		model.companyName = entity.companyName
+		model.phone = entity.phone
+		model.email = entity.email
+
+		return model
 	}
 
-	static convertList(modelList: Array<SupplierModel>) {
-		return modelList.map(model => new GetSupplierPresenter(model))
+	static mapperArray(entities: Array<Supplier>) {
+		const models = new Array<GetSupplierPresenter>()
+		entities.forEach(entity => models.push(GetSupplierPresenter.mapper(entity)))
+
+		return models
 	}
 }
