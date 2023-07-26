@@ -36,6 +36,19 @@ CREATE TABLE "inventories" (
 );
 
 -- CreateTable
+CREATE TABLE "order_items" (
+    "id" VARCHAR(36) NOT NULL,
+    "alternateId" INTEGER NOT NULL,
+    "createdAt" DATE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "quantity" INTEGER NOT NULL,
+    "totalValue" MONEY NOT NULL,
+    "productId" VARCHAR(36) NOT NULL,
+    "orderId" VARCHAR(36) NOT NULL,
+
+    CONSTRAINT "order_items_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "orders" (
     "id" VARCHAR(36) NOT NULL,
     "alternateId" INTEGER NOT NULL,
@@ -44,21 +57,8 @@ CREATE TABLE "orders" (
     "totalValue" MONEY NOT NULL,
     "arrivalData" DATE NOT NULL,
     "supplierId" VARCHAR(36) NOT NULL,
-    "totalOrdersId" VARCHAR(36) NOT NULL,
 
     CONSTRAINT "orders_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "total_orders" (
-    "id" VARCHAR(36) NOT NULL,
-    "alternateId" INTEGER NOT NULL,
-    "createdAt" DATE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "quantity" INTEGER NOT NULL,
-    "totalValue" MONEY NOT NULL,
-    "arrivalData" DATE NOT NULL,
-
-    CONSTRAINT "total_orders_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -100,10 +100,10 @@ CREATE UNIQUE INDEX "inventories_alternateId_key" ON "inventories"("alternateId"
 CREATE UNIQUE INDEX "inventories_productId_key" ON "inventories"("productId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "orders_alternateId_key" ON "orders"("alternateId");
+CREATE UNIQUE INDEX "order_items_alternateId_key" ON "order_items"("alternateId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "total_orders_alternateId_key" ON "total_orders"("alternateId");
+CREATE UNIQUE INDEX "orders_alternateId_key" ON "orders"("alternateId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "sales_alternateId_key" ON "sales"("alternateId");
@@ -118,10 +118,13 @@ ALTER TABLE "products" ADD CONSTRAINT "products_supplierId_fkey" FOREIGN KEY ("s
 ALTER TABLE "inventories" ADD CONSTRAINT "inventories_productId_fkey" FOREIGN KEY ("productId") REFERENCES "products"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "orders" ADD CONSTRAINT "orders_supplierId_fkey" FOREIGN KEY ("supplierId") REFERENCES "suppliers"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "order_items" ADD CONSTRAINT "order_items_productId_fkey" FOREIGN KEY ("productId") REFERENCES "products"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "orders" ADD CONSTRAINT "orders_totalOrdersId_fkey" FOREIGN KEY ("totalOrdersId") REFERENCES "total_orders"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "order_items" ADD CONSTRAINT "order_items_orderId_fkey" FOREIGN KEY ("orderId") REFERENCES "orders"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "orders" ADD CONSTRAINT "orders_supplierId_fkey" FOREIGN KEY ("supplierId") REFERENCES "suppliers"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "sales" ADD CONSTRAINT "sales_totalSalesId_fkey" FOREIGN KEY ("totalSalesId") REFERENCES "total_sales"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

@@ -12,7 +12,7 @@ export class getAllSupplierUseCase {
 		this._logger.log('getAllSupplierUseCase execute', 'Start to find all supplier')
 
 		const entities = await this._supplierRepository.findAll()
-		const presenters = GetSupplierPresenter.convertList(entities)
+		const presenters = GetSupplierPresenter.mapperArray(entities)
 		
 		if (!(presenters.length > 0)) throw new ExceptionService().applicationNotFound('suppliers')
 		
