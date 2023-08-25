@@ -15,10 +15,10 @@ import { deleteSupplierUseCase } from "src/usecases/supplier/delete.supplier.use
 	imports: [LoggerModule, RepositoriesModule, ExceptionsModule]
 })
 export class UseCaseProxyModule {
-	static GET_SUPPLIER_USECASES_PROXY = 'getSupplierUseCasesProxy'
-	static GET_SUPPLIERS_USECASES_PROXY = 'getSuppliersUseCasesProxy'
-	static POST_SUPPLIER_USECASES_PROXY = 'postSupplierUseCasesProxy'
-	static PUT_SUPPLIER_USECASES_PROXY = 'putSupplierUseCasesProxy'
+	static GET_SUPPLIER_USECASES_PROXY    = 'getSupplierUseCasesProxy'
+	static GET_SUPPLIERS_USECASES_PROXY   = 'getSuppliersUseCasesProxy'
+	static POST_SUPPLIER_USECASES_PROXY   = 'postSupplierUseCasesProxy'
+	static PUT_SUPPLIER_USECASES_PROXY    = 'putSupplierUseCasesProxy'
 	static DELETE_SUPPLIER_USECASES_PROXY = 'deleteSupplierUseCasesProxy'
 
 	static register(): DynamicModule {
@@ -61,7 +61,7 @@ export class UseCaseProxyModule {
 				UseCaseProxyModule.GET_SUPPLIERS_USECASES_PROXY,
 				UseCaseProxyModule.POST_SUPPLIER_USECASES_PROXY,
 				UseCaseProxyModule.PUT_SUPPLIER_USECASES_PROXY,
-                UseCaseProxyModule.DELETE_SUPPLIER_USECASES_PROXY
+				UseCaseProxyModule.DELETE_SUPPLIER_USECASES_PROXY
 			]
 		}
 	}

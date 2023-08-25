@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, Inject, Param, Post, Put } from "@nestjs
 import { UseCaseProxy } from "src/infra/usecases-proxy/usecases-proxy";
 import { UseCaseProxyModule } from "src/infra/usecases-proxy/usecases-proxy.module";
 import { createSupplierUseCase } from "src/usecases/supplier/create.supplier.usecase";
-import { CreateSupplierDTO, UpdateSupplierDTO } from "src/usecases/supplier/supplier.dto";
+import { CreateSupplierDTO, UpdateSupplierDTO } from "src/usecases/models/dtos/supplier.dto";
 import { getAllSupplierUseCase } from '../../../usecases/supplier/get-all.supplier.usecase';
 import { getByIdSupplierUseCase } from '../../../usecases/supplier/get-by-id.supplier.usecase';
 import { updateSupplierUseCase } from "src/usecases/supplier/update.supplier.usecase";

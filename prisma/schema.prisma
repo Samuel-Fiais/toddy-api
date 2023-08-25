@@ -29,6 +29,8 @@ model Product {
   createdAt   DateTime    @default(now()) @db.Date
   description String      @db.VarChar(255)
   price       Decimal     @default(0) @db.Money
+  isBulk      Boolean     @default(false)
+  conversion  Int?        @db.Integer
   supplierId  String      @db.VarChar(36)
   supplier    Supplier    @relation(fields: [supplierId], references: [id])
   inventory   Inventory?
@@ -76,25 +78,38 @@ model Order {
   @@map("orders")
 }
 
-model Sale {
+model SaleItem {
   id           String     @id @default(uuid()) @db.VarChar(36)
   alternateId  Int        @unique @db.Integer
   createdAt    DateTime   @default(now()) @db.Date
   quantity     Int        @db.Integer
   totalValue   Decimal    @db.Money
   totalSalesId String     @db.VarChar(36)
-  totalSales   TotalSales @relation(fields: [totalSalesId], references: [id])
+  totalSales   Sale @relation(fields: [totalSalesId], references: [id])
+
+  @@map("sale-items")
+}
+
+model Sale {
+  id           String   @id @default(uuid()) @db.VarChar(36)
+  alternateId  Int      @unique @db.Integer
+  createdAt    DateTime @default(now()) @db.Date
+  quantity     Int      @db.Integer
+  totalValue   Decimal  @db.Money
+  cardDiscount Decimal  @db.Money
+  paymentId    String   @db.VarChar(36)
+  payment      PaymentType? @relation(fields: [paymentId], references: [id])
+  sales        SaleItem[]
 
   @@map("sales")
 }
 
-model TotalSales {
+model PaymentType {
   id          String   @id @default(uuid()) @db.VarChar(36)
   alternateId Int      @unique @db.Integer
   createdAt   DateTime @default(now()) @db.Date
-  quantity    Int      @db.Integer
-  totalValue  Decimal  @db.Money
-  sales       Sale[]
+  description String   @db.VarChar(255)
+  totalSales  Sale[]
 
-  @@map("total_sales")
+  @@map("payment_types")
 }

@@ -4,6 +4,7 @@ import { ResponseInterceptor } from './infra/common/interceptors/response.interc
 import { AllExceptionFilter } from './infra/common/filter/exception.filter';
 import { LoggerService } from './infra/logger/logger.service';
 import { PrismaService } from './infra/database/prisma.service';
+import * as cors from 'cors'
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -18,6 +19,8 @@ async function bootstrap() {
   const prismaService = app.get(PrismaService);
   await prismaService.$connect();
 
-  await app.listen(process.env.PORT);
+  app.use(cors());
+
+  await app.listen(3000);
 }
 bootstrap();

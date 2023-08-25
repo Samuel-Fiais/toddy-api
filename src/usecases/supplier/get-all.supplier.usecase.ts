@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { SupplierRepository } from 'src/infra/repositories/supplier.repository';
 import { ExceptionService } from 'src/infra/exceptions/exception.service';
 import { LoggerService } from 'src/infra/logger/logger.service';
-import { GetSupplierPresenter } from './supplier.presenter';
+import { GetSupplierPresenter } from '../models/presenters/supplier.presenter';
 
 @Injectable()
 export class getAllSupplierUseCase {
@@ -12,7 +12,7 @@ export class getAllSupplierUseCase {
 		this._logger.log('getAllSupplierUseCase execute', 'Start to find all supplier')
 
 		const entities = await this._supplierRepository.findAll()
-		const presenters = GetSupplierPresenter.mapperArray(entities)
+		let presenters = GetSupplierPresenter.mapperArray(entities).sort((a, b) => (a.alternateId > b.alternateId) ? 1 : -1)
 		
 		if (!(presenters.length > 0)) throw new ExceptionService().applicationNotFound('suppliers')
 		

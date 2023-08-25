@@ -1,4 +1,5 @@
 import { Supplier } from "src/domain/entities/supplier.entity"
+import { GetProductPresenter } from "./product.presenter"
 
 export class GetSupplierPresenter {
 	id: string
@@ -10,6 +11,8 @@ export class GetSupplierPresenter {
 	phone: string
 	email: string
 
+	products: GetProductPresenter[]
+
 	static mapper = (entity: Supplier) => {
 		const model = new GetSupplierPresenter()
 		model.id = entity.id
@@ -20,6 +23,8 @@ export class GetSupplierPresenter {
 		model.companyName = entity.companyName
 		model.phone = entity.phone
 		model.email = entity.email
+
+		model.products = entity.products
 
 		return model
 	}
