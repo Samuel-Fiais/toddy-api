@@ -5,11 +5,11 @@ import { LoggerService } from 'src/infra/logger/logger.service';
 import { ValidationUtils } from 'src/infra/common/utils/validation.utils';
 
 @Injectable()
-export class deleteSupplierUseCase {
+export class DeleteSupplierUseCase {
 	constructor(protected _logger: LoggerService, private readonly _supplierRepository: SupplierRepository) {}
 
 	async execute(id: string): Promise<boolean> {
-		this._logger.log('removeSupplierUseCase remove', 'Start to remove supplier by id')
+		this._logger.log('RemoveSupplierUseCase remove', 'Start to remove supplier by id')
 
 		const hasErrorValidation = await ValidationUtils.validateIdParam(id)
 		
@@ -20,7 +20,7 @@ export class deleteSupplierUseCase {
 		
 		const isEntityRemoved = await this._supplierRepository.delete(id)
 
-		this._logger.log('removeSupplierUseCase execute', 'Removing supplier by id was successful')
+		this._logger.log('RemoveSupplierUseCase execute', 'Removing supplier by id was successful')
 
 		return isEntityRemoved
 	}

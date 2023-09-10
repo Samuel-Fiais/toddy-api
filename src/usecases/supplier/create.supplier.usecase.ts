@@ -8,11 +8,11 @@ import { ValidationUtils } from 'src/infra/common/utils/validation.utils';
 import { createSupplierSchema } from '../models/schemas/supplier.schemas';
 
 @Injectable()
-export class createSupplierUseCase {
+export class CreateSupplierUseCase {
 	constructor(protected _logger: LoggerService, private readonly _supplierRepository: SupplierRepository) {}
 
 	async execute(model: CreateSupplierDTO): Promise<Supplier> {
-		this._logger.log('createSupplierUseCase execute', 'Start to create a new supplier')
+		this._logger.log('CreateSupplierUseCase execute', 'Start to create a new supplier')
 
 		const validation = new ValidationUtils<CreateSupplierDTO>(createSupplierSchema)
 		const hasError = await validation.validateSchema(model)
@@ -24,7 +24,7 @@ export class createSupplierUseCase {
 		const entity = CreateSupplierDTO.mapper(model)
 		const supplierInserted = await this._supplierRepository.create(entity)
 
-		this._logger.log('createSupplierUseCase execute', 'New supplier have be inserted')
+		this._logger.log('CreateSupplierUseCase execute', 'New supplier have be inserted')
 
 		return supplierInserted
 	}
@@ -33,7 +33,7 @@ export class createSupplierUseCase {
 		const supplierExists = await this._supplierRepository.find(f => f.document == document)
 
 		if (supplierExists.length > 0) {
-			this._logger.warn('createSupplierUseCase execute', 'Supplier with this document already exists')
+			this._logger.warn('CreateSupplierUseCase execute', 'Supplier with this document already exists')
 			new ExceptionService().applicationExistingRegister(['Documento'])
 		}
 	}

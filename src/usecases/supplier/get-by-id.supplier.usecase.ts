@@ -6,11 +6,11 @@ import { ValidationUtils } from 'src/infra/common/utils/validation.utils';
 import { GetSupplierPresenter } from '../models/presenters/supplier.presenter';
 
 @Injectable()
-export class getByIdSupplierUseCase {
+export class GetByIdSupplierUseCase {
 	constructor(protected _logger: LoggerService, private readonly _supplierRepository: SupplierRepository) {}
 
 	async execute(id: string): Promise<GetSupplierPresenter> {
-		this._logger.log('getByIdSupplierUseCase execute', 'Start to find supplier by id')
+		this._logger.log('GetByIdSupplierUseCase execute', 'Start to find supplier by id')
 
 		const hasErrorValidation = await ValidationUtils.validateIdParam(id)
 		
@@ -21,7 +21,7 @@ export class getByIdSupplierUseCase {
 		
 		const presenter = GetSupplierPresenter.mapper(entity)
 
-		this._logger.log('getByIdSupplierUseCase execute', 'Searching supplier by id was successful')
+		this._logger.log('GetByIdSupplierUseCase execute', 'Searching supplier by id was successful')
 
 		return presenter
 	}
