@@ -13,6 +13,9 @@ RUN npm install
 # Copie o código-fonte da aplicação para o contêiner
 COPY . .
 
+# Roda as migrations
+# RUN npx prisma migrate dev
+
 # Compile o código TypeScript
 RUN npm run build
 

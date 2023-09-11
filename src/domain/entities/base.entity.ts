@@ -1,5 +1,5 @@
 ﻿export class Base {
-    id: string;
-    alternateId: number;
-    createdAt: Date;
+  id: string;
+  alternateId: number;
+  createdAt: Date;
 }

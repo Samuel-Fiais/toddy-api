@@ -1,31 +1,22 @@
 version: '3'
 services:
-  api:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - "3000:3000"
-    depends_on:
-      - database
-    environment:
-      POSTGRES_HOST: database
-      POSTGRES_PORT: 5432
-      POSTGRES_USER: your_db_user
-      POSTGRES_PASSWORD: your_db_password
-      POSTGRES_DB: your_db_name
-    networks:
-      - mynetwork
   database:
-    image: postgres:latest
+    image: postgres:alpine
+    ports: 
+      - "5431:5432"
+    container_name: postgres-db
+    restart: always
+    volumes:
+      - ./data:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 201984
-      POSTGRES_DB: toddy
-    ports:
-      - "5432:5432"
-    networks:
-      - mynetwork
 
-networks:
-  mynetwork:
+  myapp:
+    build:
+      context: .
+    ports:
+      - "3000:3000"
+    depends_on:
+      database:
+        condition: service_healthy
