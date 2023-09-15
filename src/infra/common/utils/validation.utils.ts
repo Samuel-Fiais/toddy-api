@@ -1,26 +1,26 @@
-import * as yup from 'yup';
+import * as yup from 'yup'
 
 export class ValidationUtils<T> {
-	private schema: yup.Schema<T>;
+	private schema: yup.Schema<T>
   
 	constructor(schema: yup.Schema<T>) {
-		this.schema = schema;
+		this.schema = schema
 	}
   
 	validateSchema = async (model: T) => {
 		try {
-			await this.schema.validate(model, { abortEarly: false, strict: true });
-			return false;
+			await this.schema.validate(model, { abortEarly: false, strict: true })
+			return false
 		} catch (e) {
-			const yupError = e as yup.ValidationError;
-			const validationErrors: Record<string, string> = {};
+			const yupError = e as yup.ValidationError
+			const validationErrors: Record<string, string> = {}
 	
 			yupError.inner.forEach((error) => {
-				if (error.path === undefined) return;
-				validationErrors[error.path] = error.message;
-			});
+				if (error.path === undefined) return
+				validationErrors[error.path] = error.message
+			})
   
-			return validationErrors;
+			return validationErrors
 		}
 	}
 
@@ -30,13 +30,13 @@ export class ValidationUtils<T> {
 				.string()
 				.uuid("O campo 'id' deve ser um UUID válido")
 				.required("O campo 'id' é obrigatório."),	
-		});
+		})
 
 		const objectId = {
 			id: id
-		};
+		}
 		const validation = new ValidationUtils<{id: string}>(schemaId)
 
-		return await validation.validateSchema(objectId);
+		return await validation.validateSchema(objectId)
 	}
 }

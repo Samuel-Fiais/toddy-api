@@ -1,5 +1,6 @@
-import { Base } from "./base.entity";
-import { PaymentType } from "./payment-types.entity";
+import { Base } from "./base.entity"
+import { SaleItem } from "@prisma/client"
+import { PaymentType } from "./payment-types.entity"
 
 export class Sale extends Base {
 	quantity: number
@@ -8,4 +9,6 @@ export class Sale extends Base {
 	
 	paymentId: string
 	payment: PaymentType
+
+	saleItems: SaleItem[]
 }

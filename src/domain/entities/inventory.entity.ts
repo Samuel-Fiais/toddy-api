@@ -1,8 +1,8 @@
-﻿import { Base } from "./base.entity";
-import { Product } from "./product.entity";
+﻿import { Base } from "./base.entity"
+import { Product } from "./product.entity"
 
 export class Inventory extends Base {
-    quantity: number;
-    productId: string;
-    product: Product;
+    quantity: number
+    productId: string
+    product: Product
 }

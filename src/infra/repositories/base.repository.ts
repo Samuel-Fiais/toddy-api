@@ -1,7 +1,7 @@
-import {Injectable, LoggerService} from "@nestjs/common";
-import {IBaseRepository} from "src/domain/repositories/repository.interface";
-import {PrismaService} from "../database/prisma.service";
-import {ExceptionService} from "../exceptions/exception.service";
+import {Injectable, LoggerService} from "@nestjs/common"
+import {IBaseRepository} from "src/domain/repositories/repository.interface"
+import {PrismaService} from "../database/prisma.service"
+import {ExceptionService} from "../exceptions/exception.service"
 
 @Injectable()
 export class BaseRepository<T> implements IBaseRepository<T> {
@@ -33,11 +33,12 @@ export class BaseRepository<T> implements IBaseRepository<T> {
 	
 	async update(entity: T): Promise<boolean> {
 		try {
-			const id = entity['id'];
+			const id = entity['id']
+			delete entity['createdAt']
 			return await this._prisma[this._modelName].update({
 				where: {id},
 				data: entity,
-			});
+			})
 		} catch (e) {
 			this.logger.error(`BaseRepository<${this._modelName}> update`, `Error to update a ${this._modelName}`, e)
 			new ExceptionService().applicationOperationUpdateRepository(this._modelName)
@@ -48,7 +49,7 @@ export class BaseRepository<T> implements IBaseRepository<T> {
 		try {
 			return await this._prisma[this._modelName].delete({
 				where: {id},
-			});
+			})
 		} catch (e) {
 			this.logger.error(`BaseRepository<${this._modelName}> delete`, `Error to delete a ${this._modelName}`, e)
 			new ExceptionService().applicationOperationDeleteRepository(this._modelName)
@@ -68,25 +69,25 @@ export class BaseRepository<T> implements IBaseRepository<T> {
 		try {
 			const query = {
 				where: { id },
-			};
-	
-			if (includeRelations && includeRelations.length > 0) {
-				query['include'] = {};
-				includeRelations.forEach((relation) => {
-					query['include'][relation] = true;
-				});
 			}
 	
-			return await this._prisma[this._modelName].findUnique(query);
+			if (includeRelations && includeRelations.length > 0) {
+				query['include'] = {}
+				includeRelations.forEach((relation) => {
+					query['include'][relation] = true
+				})
+			}
+	
+			return await this._prisma[this._modelName].findUnique(query)
 		} catch (e) {
-			this.logger.error(`BaseRepository<${this._modelName}> findById`, `Error to find a ${this._modelName} by id`, e);
-			new ExceptionService().applicationOperationFindRepository(this._modelName);
+			this.logger.error(`BaseRepository<${this._modelName}> findById`, `Error to find a ${this._modelName} by id`, e)
+			new ExceptionService().applicationOperationFindRepository(this._modelName)
 		}
 	}	
 	
 	async find(filter: (item: T) => boolean): Promise<T[]> {
-		const entities = await this._prisma[this._modelName].findMany();
+		const entities = await this._prisma[this._modelName].findMany()
 
-		return entities.filter(filter);
+		return entities.filter(filter)
 	}
 }

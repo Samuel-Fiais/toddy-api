@@ -1,6 +1,6 @@
-import { Injectable } from "@nestjs/common";
-import { LoggerService } from "src/infra/logger/logger.service";
-import { Speedio } from "../external/speedio.external";
+import { Injectable } from "@nestjs/common"
+import { LoggerService } from "src/infra/logger/logger.service"
+import { Speedio } from "../external/speedio.external"
 
 @Injectable()
 export class GetCompanyInfoUseCase {

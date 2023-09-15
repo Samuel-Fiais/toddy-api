@@ -19,6 +19,8 @@ CREATE TABLE "products" (
     "createdAt" DATE NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "description" VARCHAR(255) NOT NULL,
     "price" MONEY NOT NULL DEFAULT 0,
+    "isBulk" BOOLEAN NOT NULL DEFAULT false,
+    "conversion" INTEGER,
     "supplierId" VARCHAR(36) NOT NULL,
 
     CONSTRAINT "products_pkey" PRIMARY KEY ("id")
@@ -62,26 +64,39 @@ CREATE TABLE "orders" (
 );
 
 -- CreateTable
-CREATE TABLE "sales" (
+CREATE TABLE "sale-items" (
     "id" VARCHAR(36) NOT NULL,
     "alternateId" INTEGER NOT NULL,
     "createdAt" DATE NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "quantity" INTEGER NOT NULL,
     "totalValue" MONEY NOT NULL,
     "totalSalesId" VARCHAR(36) NOT NULL,
+    "productId" VARCHAR(36) NOT NULL,
 
-    CONSTRAINT "sales_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "sale-items_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "total_sales" (
+CREATE TABLE "sales" (
     "id" VARCHAR(36) NOT NULL,
     "alternateId" INTEGER NOT NULL,
     "createdAt" DATE NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "quantity" INTEGER NOT NULL,
     "totalValue" MONEY NOT NULL,
+    "cardDiscount" MONEY NOT NULL,
+    "paymentId" VARCHAR(36) NOT NULL,
 
-    CONSTRAINT "total_sales_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "sales_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "payment_types" (
+    "id" VARCHAR(36) NOT NULL,
+    "alternateId" INTEGER NOT NULL,
+    "createdAt" DATE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "description" VARCHAR(255) NOT NULL,
+
+    CONSTRAINT "payment_types_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
@@ -106,10 +121,13 @@ CREATE UNIQUE INDEX "order_items_alternateId_key" ON "order_items"("alternateId"
 CREATE UNIQUE INDEX "orders_alternateId_key" ON "orders"("alternateId");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "sale-items_alternateId_key" ON "sale-items"("alternateId");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "sales_alternateId_key" ON "sales"("alternateId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "total_sales_alternateId_key" ON "total_sales"("alternateId");
+CREATE UNIQUE INDEX "payment_types_alternateId_key" ON "payment_types"("alternateId");
 
 -- AddForeignKey
 ALTER TABLE "products" ADD CONSTRAINT "products_supplierId_fkey" FOREIGN KEY ("supplierId") REFERENCES "suppliers"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -127,4 +145,10 @@ ALTER TABLE "order_items" ADD CONSTRAINT "order_items_orderId_fkey" FOREIGN KEY 
 ALTER TABLE "orders" ADD CONSTRAINT "orders_supplierId_fkey" FOREIGN KEY ("supplierId") REFERENCES "suppliers"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "sales" ADD CONSTRAINT "sales_totalSalesId_fkey" FOREIGN KEY ("totalSalesId") REFERENCES "total_sales"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "sale-items" ADD CONSTRAINT "sale-items_totalSalesId_fkey" FOREIGN KEY ("totalSalesId") REFERENCES "sales"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "sale-items" ADD CONSTRAINT "sale-items_productId_fkey" FOREIGN KEY ("productId") REFERENCES "products"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "sales" ADD CONSTRAINT "sales_paymentId_fkey" FOREIGN KEY ("paymentId") REFERENCES "payment_types"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

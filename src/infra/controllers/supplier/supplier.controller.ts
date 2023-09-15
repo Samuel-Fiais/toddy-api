@@ -1,14 +1,16 @@
-import { Body, Controller, Delete, Get, Inject, Param, Post, Put } from "@nestjs/common";
-import { UseCaseProxy } from "src/infra/usecases-proxy/usecases-proxy";
-import { UseCaseProxyModule } from "src/infra/usecases-proxy/usecases-proxy.module";
-import { CreateSupplierUseCase } from "src/usecases/supplier/create.supplier.usecase";
-import { CreateSupplierDTO, UpdateSupplierDTO } from "src/usecases/models/dtos/supplier.dto";
-import { GetAllSupplierUseCase } from '../../../usecases/supplier/get-all.supplier.usecase';
-import { GetByIdSupplierUseCase } from '../../../usecases/supplier/get-by-id.supplier.usecase';
-import { UpdateSupplierUseCase } from "src/usecases/supplier/update.supplier.usecase";
-import { DeleteSupplierUseCase } from "src/usecases/supplier/delete.supplier.usecase";
+import { Body, Controller, Delete, Get, Inject, Param, Post, Put } from "@nestjs/common"
+import { UseCaseProxy } from "src/infra/usecases-proxy/usecases-proxy"
+import { UseCaseProxyModule } from "src/infra/usecases-proxy/usecases-proxy.module"
+import { CreateSupplierUseCase } from "src/usecases/supplier/create.supplier.usecase"
+import { CreateSupplierDTO, UpdateSupplierDTO } from "src/usecases/models/dtos/supplier.dto"
+import { GetAllSupplierUseCase } from '../../../usecases/supplier/get-all.supplier.usecase'
+import { GetByIdSupplierUseCase } from '../../../usecases/supplier/get-by-id.supplier.usecase'
+import { UpdateSupplierUseCase } from "src/usecases/supplier/update.supplier.usecase"
+import { DeleteSupplierUseCase } from "src/usecases/supplier/delete.supplier.usecase"
+import { ApiTags } from "@nestjs/swagger"
 
 @Controller('supplier')
+@ApiTags('supplier')
 export class SupplierController {
 	constructor(
 		@Inject(UseCaseProxyModule.GET_SUPPLIER_USECASE_PROXY)

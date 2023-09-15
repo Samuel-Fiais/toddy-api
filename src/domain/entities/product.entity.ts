@@ -1,14 +1,17 @@
-import { Supplier } from "@prisma/client";
-import { Base } from "./base.entity";
-import { Inventory } from "./inventory.entity";
+import { OrderItem, SaleItem, Supplier } from "@prisma/client"
+import { Base } from "./base.entity"
+import { Inventory } from "./inventory.entity"
 
 export class Product extends Base {
-	description: string;
-	price: number;
+	description: string
+	price: number
 	
-	supplierId: string;
-	supplier: Supplier;
+	supplierId: string
+	supplier: Supplier
 	
-	inventoryId: string;
-	inventory: Inventory;
+	inventoryId: string
+	inventory: Inventory
+
+	orderItems: OrderItem[]
+	saleItems: SaleItem[]
 }

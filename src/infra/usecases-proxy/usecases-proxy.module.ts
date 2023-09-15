@@ -1,28 +1,28 @@
-import { DynamicModule, Module } from '@nestjs/common';
-import { LoggerModule } from '../logger/logger.module';
-import { RepositoriesModule } from '../repositories/repositories.module';
-import { ExceptionsModule } from '../exceptions/exception.module';
-import { SupplierRepository } from '../repositories/supplier.repository';
-import { UseCaseProxy } from './usecases-proxy';
-import { CreateSupplierUseCase } from 'src/usecases/supplier/create.supplier.usecase';
-import { LoggerService } from '../logger/logger.service';
-import { GetAllSupplierUseCase } from 'src/usecases/supplier/get-all.supplier.usecase';
-import { GetByIdSupplierUseCase } from 'src/usecases/supplier/get-by-id.supplier.usecase';
-import { UpdateSupplierUseCase } from 'src/usecases/supplier/update.supplier.usecase';
-import { DeleteSupplierUseCase } from 'src/usecases/supplier/delete.supplier.usecase';
-import { GetCompanyInfoUseCase } from 'src/usecases/company-info/get-company-info.usecase';
+import { DynamicModule, Module } from '@nestjs/common'
+import { LoggerModule } from '../logger/logger.module'
+import { RepositoriesModule } from '../repositories/repositories.module'
+import { ExceptionsModule } from '../exceptions/exception.module'
+import { SupplierRepository } from '../repositories/supplier.repository'
+import { UseCaseProxy } from './usecases-proxy'
+import { CreateSupplierUseCase } from 'src/usecases/supplier/create.supplier.usecase'
+import { LoggerService } from '../logger/logger.service'
+import { GetAllSupplierUseCase } from 'src/usecases/supplier/get-all.supplier.usecase'
+import { GetByIdSupplierUseCase } from 'src/usecases/supplier/get-by-id.supplier.usecase'
+import { UpdateSupplierUseCase } from 'src/usecases/supplier/update.supplier.usecase'
+import { DeleteSupplierUseCase } from 'src/usecases/supplier/delete.supplier.usecase'
+import { GetCompanyInfoUseCase } from 'src/usecases/company-info/get-company-info.usecase'
 
 @Module({
   imports: [LoggerModule, RepositoriesModule, ExceptionsModule],
 })
 export class UseCaseProxyModule {
-  static GET_SUPPLIER_USECASE_PROXY = 'GetSupplierUseCaseProxy';
-  static GET_SUPPLIERS_USECASE_PROXY = 'GetSuppliersUseCaseProxy';
-  static POST_SUPPLIER_USECASE_PROXY = 'PostSupplierUseCaseProxy';
-  static PUT_SUPPLIER_USECASE_PROXY = 'PutSupplierUseCaseProxy';
-  static DELETE_SUPPLIER_USECASE_PROXY = 'DeleteSupplierUseCaseProxy';
+  static GET_SUPPLIER_USECASE_PROXY = 'GetSupplierUseCaseProxy'
+  static GET_SUPPLIERS_USECASE_PROXY = 'GetSuppliersUseCaseProxy'
+  static POST_SUPPLIER_USECASE_PROXY = 'PostSupplierUseCaseProxy'
+  static PUT_SUPPLIER_USECASE_PROXY = 'PutSupplierUseCaseProxy'
+  static DELETE_SUPPLIER_USECASE_PROXY = 'DeleteSupplierUseCaseProxy'
 
-  static GET_COMPANY_INFO_USECASE_PROXY = 'GetCompanyInfoUseCaseProxy';
+  static GET_COMPANY_INFO_USECASE_PROXY = 'GetCompanyInfoUseCaseProxy'
 
   static register(): DynamicModule {
     return {
@@ -101,6 +101,6 @@ export class UseCaseProxyModule {
 
         UseCaseProxyModule.GET_COMPANY_INFO_USECASE_PROXY,
       ],
-    };
+    }
   }
 }

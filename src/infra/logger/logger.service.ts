@@ -1,5 +1,5 @@
-import { Injectable, Logger } from "@nestjs/common";
-import { ILogger } from "src/domain/logger/logger.interface";
+import { Injectable, Logger } from "@nestjs/common"
+import { ILogger } from "src/domain/logger/logger.interface"
 
 @Injectable()
 export class LoggerService extends Logger implements ILogger {
@@ -8,10 +8,10 @@ export class LoggerService extends Logger implements ILogger {
 	}
 	
 	error(context: string, message: string, trace?: string) {
-		super.error(`[ERROR] ${message}`, trace, context);
+		super.error(`[ERROR] ${message}`, trace, context)
 	}
 	
 	warn(context: string, message: string) {
-		super.warn(`[WARN] ${message}`, context);
+		super.warn(`[WARN] ${message}`, context)
 	}
 }

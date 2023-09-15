@@ -1,5 +1,5 @@
-import { CompanyInfoPresenter } from "../models/presenters/company-info.presenter";
-import { SpeedioEndpoint } from "./endpoints/speedio.endpoint";
+import { CompanyInfoPresenter } from "../models/presenters/company-info.presenter"
+import { SpeedioEndpoint } from "./endpoints/speedio.endpoint"
 
 export class Speedio {
 	static async getInfoByCNPJ(cnpj: string) {
