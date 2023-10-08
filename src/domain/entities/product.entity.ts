@@ -1,17 +1,23 @@
-import { OrderItem, SaleItem, Supplier } from "@prisma/client"
-import { Base } from "./base.entity"
-import { Inventory } from "./inventory.entity"
+import { BaseEntity } from "./base.entity";
+import { ProductHistory } from "./history.entity";
+import { Inventory } from "./inventory.entity";
+import { OrderItem } from "./order-item.entity";
+import { SaleItem } from "./sale-item.entity";
+import { Supplier } from "./supplier.entity";
 
-export class Product extends Base {
-	description: string
-	price: number
-	
-	supplierId: string
-	supplier: Supplier
-	
-	inventoryId: string
-	inventory: Inventory
+export class Product extends BaseEntity {
+  description: string;
+  price: number;
+  isBulk: boolean;
+  conversion?: number;
 
-	orderItems: OrderItem[]
-	saleItems: SaleItem[]
+  supplierId: string;
+  supplier: Supplier;
+
+  inventoryId: string;
+  inventory: Inventory;
+
+  orderItems: OrderItem[];
+  saleItems: SaleItem[];
+  productHistories: ProductHistory[];
 }

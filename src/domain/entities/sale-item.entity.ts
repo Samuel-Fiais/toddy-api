@@ -1,15 +1,13 @@
-import { Base } from "./base.entity"
-import { Product } from "./product.entity"
-import { Sale } from "./sale.entity"
+import { BaseEntity } from "./base.entity";
+import { Product } from "./product.entity";
+import { Sale } from "./sale.entity";
 
-export class SaleItem extends Base {
-	description: string
-	quantity: number
-	totalValue: number
-	
-	saleId: string
-	sales: Sale
+export class SaleItem extends BaseEntity {
+  quantity: number;
+  totalValue: number;
 
-	productId: string
-	product: Product
+  saleId: string;
+  sale: Sale;
+  productId: string;
+  product: Product;
 }

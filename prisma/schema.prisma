@@ -9,33 +9,39 @@ datasource db {
 }
 
 model Supplier {
-  id          String    @id @default(uuid()) @db.VarChar(36)
-  alternateId Int       @unique @db.Integer
-  createdAt   DateTime  @default(now()) @db.Date
-  document    String    @unique @db.VarChar(14)
-  tradeName   String    @db.VarChar(255)
-  companyName String    @db.VarChar(255)
-  phone       String    @db.VarChar(11)
-  email       String    @db.VarChar(36)
-  products    Product[]
-  orders      Order[]
+  id          String   @id @default(uuid()) @db.VarChar(36)
+  alternateId Int      @unique @db.Integer
+  createdAt   DateTime @default(now()) @db.Date
+  document    String   @unique @db.VarChar(14)
+  tradeName   String   @db.VarChar(255)
+  companyName String   @db.VarChar(255)
+  phone       String   @db.VarChar(11)
+  email       String   @db.VarChar(36)
+
+  storeId String @db.VarChar(36)
+  store   Store  @relation(fields: [storeId], references: [id])
+
+  products          Product[]
+  orders            Order[]
+  supplierHistories SupplierHistory[]
 
   @@map("suppliers")
 }
 
 model Product {
-  id          String      @id @default(uuid()) @db.VarChar(36)
-  alternateId Int         @unique @db.Integer
-  createdAt   DateTime    @default(now()) @db.Date
-  description String      @db.VarChar(255)
-  price       Decimal     @default(0) @db.Money
-  isBulk      Boolean     @default(false)
-  conversion  Int?        @db.Integer
-  supplierId  String      @db.VarChar(36)
-  supplier    Supplier    @relation(fields: [supplierId], references: [id])
-  inventory   Inventory?
-  orderItems  OrderItem[]
-  saleItems   SaleItem[]
+  id               String           @id @default(uuid()) @db.VarChar(36)
+  alternateId      Int              @unique @db.Integer
+  createdAt        DateTime         @default(now()) @db.Date
+  description      String           @db.VarChar(255)
+  price            Decimal          @default(0) @db.Money
+  isBulk           Boolean          @default(false)
+  conversion       Int?             @db.Integer
+  supplierId       String           @db.VarChar(36)
+  supplier         Supplier         @relation(fields: [supplierId], references: [id])
+  inventory        Inventory?
+  orderItems       OrderItem[]
+  saleItems        SaleItem[]
+  productHistories ProductHistory[]
 
   @@map("products")
 }
@@ -66,43 +72,45 @@ model OrderItem {
 }
 
 model Order {
-  id          String      @id @default(uuid()) @db.VarChar(36)
-  alternateId Int         @unique @db.Integer
-  createdAt   DateTime    @default(now()) @db.Date
-  quantity    Int         @db.Integer
-  totalValue  Decimal     @db.Money
-  arrivalData DateTime    @db.Date
-  supplierId  String      @db.VarChar(36)
-  supplier    Supplier    @relation(fields: [supplierId], references: [id])
-  orderItems  OrderItem[]
+  id             String         @id @default(uuid()) @db.VarChar(36)
+  alternateId    Int            @unique @db.Integer
+  createdAt      DateTime       @default(now()) @db.Date
+  quantity       Int            @db.Integer
+  totalValue     Decimal        @db.Money
+  arrivalData    DateTime       @db.Date
+  supplierId     String         @db.VarChar(36)
+  supplier       Supplier       @relation(fields: [supplierId], references: [id])
+  orderItems     OrderItem[]
+  orderHistories OrderHistory[]
 
   @@map("orders")
 }
 
 model SaleItem {
-  id           String   @id @default(uuid()) @db.VarChar(36)
-  alternateId  Int      @unique @db.Integer
-  createdAt    DateTime @default(now()) @db.Date
-  quantity     Int      @db.Integer
-  totalValue   Decimal  @db.Money
-  saleId String   @db.VarChar(36)
-  sale   Sale     @relation(fields: [saleId], references: [id])
-  productId    String   @db.VarChar(36)
-  product      Product  @relation(fields: [productId], references: [id])
+  id          String   @id @default(uuid()) @db.VarChar(36)
+  alternateId Int      @unique @db.Integer
+  createdAt   DateTime @default(now()) @db.Date
+  quantity    Int      @db.Integer
+  totalValue  Decimal  @db.Money
+  saleId      String   @db.VarChar(36)
+  sale        Sale     @relation(fields: [saleId], references: [id])
+  productId   String   @db.VarChar(36)
+  product     Product  @relation(fields: [productId], references: [id])
 
   @@map("sale-items")
 }
 
 model Sale {
-  id           String       @id @default(uuid()) @db.VarChar(36)
-  alternateId  Int          @unique @db.Integer
-  createdAt    DateTime     @default(now()) @db.Date
-  quantity     Int          @db.Integer
-  totalValue   Decimal      @db.Money
-  cardDiscount Decimal      @db.Money
-  paymentId    String       @db.VarChar(36)
-  payment      PaymentType? @relation(fields: [paymentId], references: [id])
-  saleItems        SaleItem[]
+  id            String        @id @default(uuid()) @db.VarChar(36)
+  alternateId   Int           @unique @db.Integer
+  createdAt     DateTime      @default(now()) @db.Date
+  quantity      Int           @db.Integer
+  totalValue    Decimal       @db.Money
+  cardDiscount  Decimal       @db.Money
+  paymentId     String        @db.VarChar(36)
+  payment       PaymentType?  @relation(fields: [paymentId], references: [id])
+  saleItems     SaleItem[]
+  saleHistories SaleHistory[]
 
   @@map("sales")
 }
@@ -112,7 +120,134 @@ model PaymentType {
   alternateId Int      @unique @db.Integer
   createdAt   DateTime @default(now()) @db.Date
   description String   @db.VarChar(255)
-  sale  Sale[]
+  sale        Sale[]
 
   @@map("payment_types")
+}
+
+model Store {
+  id          String     @id @default(uuid()) @db.VarChar(36)
+  alternateId Int        @unique @db.Integer
+  createdAt   DateTime   @default(now()) @db.Date
+  name        String     @unique @db.VarChar(255)
+  address     String     @db.VarChar(255)
+  employees   Employee[]
+  suppliers   Supplier[]
+
+  @@map("stores")
+}
+
+model User {
+  id            String        @id @default(uuid()) @db.VarChar(36)
+  alternateId   Int           @unique @db.Integer
+  createdAt     DateTime      @default(now()) @db.Date
+  username      String        @unique @db.VarChar(255)
+  email         String        @unique @db.VarChar(255)
+  password      String        @db.VarChar(255)
+  permissions   Permission[]
+  userHistories UserHistory[]
+  employee      Employee?
+
+  @@map("users")
+}
+
+model Employee {
+  id                String            @id @default(uuid()) @db.VarChar(36)
+  alternateId       Int               @unique @db.Integer
+  createdAt         DateTime          @default(now()) @db.Date
+  name              String            @db.VarChar(255)
+  document          String            @unique @db.VarChar(14)
+  phone             String            @db.VarChar(11)
+  email             String            @db.VarChar(255)
+  storeId           String            @db.VarChar(36)
+  store             Store             @relation(fields: [storeId], references: [id])
+  userId            String            @unique @db.VarChar(36)
+  user              User              @relation(fields: [userId], references: [id])
+  employeeHistories EmployeeHistory[]
+
+  @@map("employees")
+}
+
+model Permission {
+  id          String   @id @default(uuid()) @db.VarChar(36)
+  alternateId Int      @unique @db.Integer
+  createdAt   DateTime @default(now()) @db.Date
+  description String   @unique @db.VarChar(255)
+  users       User[]
+
+  @@map("permissions")
+}
+
+// Entidades de Histórico
+
+model UserHistory {
+  id          String   @id @default(uuid()) @db.VarChar(36)
+  alternateId Int      @unique @db.Integer
+  createdAt   DateTime @default(now()) @db.Date
+  userId      String   @db.VarChar(36)
+  user        User     @relation(fields: [userId], references: [id])
+  action      String   @db.VarChar(255)
+  timestamp   DateTime @default(now()) @db.Date
+
+  @@map("user_histories")
+}
+
+model EmployeeHistory {
+  id          String   @id @default(uuid()) @db.VarChar(36)
+  alternateId Int      @unique @db.Integer
+  createdAt   DateTime @default(now()) @db.Date
+  employeeId  String   @db.VarChar(36)
+  employee    Employee @relation(fields: [employeeId], references: [id])
+  action      String   @db.VarChar(255)
+  timestamp   DateTime @default(now()) @db.Date
+
+  @@map("employee_histories")
+}
+
+model ProductHistory {
+  id          String   @id @default(uuid()) @db.VarChar(36)
+  alternateId Int      @unique @db.Integer
+  createdAt   DateTime @default(now()) @db.Date
+  productId   String   @db.VarChar(36)
+  product     Product  @relation(fields: [productId], references: [id])
+  action      String   @db.VarChar(255)
+  timestamp   DateTime @default(now()) @db.Date
+
+  @@map("product_histories")
+}
+
+model SupplierHistory {
+  id          String   @id @default(uuid()) @db.VarChar(36)
+  alternateId Int      @unique @db.Integer
+  createdAt   DateTime @default(now()) @db.Date
+  supplierId  String   @db.VarChar(36)
+  supplier    Supplier @relation(fields: [supplierId], references: [id])
+  action      String   @db.VarChar(255)
+  timestamp   DateTime @default(now()) @db.Date
+
+  @@map("supplier_histories")
+}
+
+model OrderHistory {
+  id          String   @id @default(uuid()) @db.VarChar(36)
+  alternateId Int      @unique @db.Integer
+  createdAt   DateTime @default(now()) @db.Date
+  orderId     String   @db.VarChar(36)
+  order       Order    @relation(fields: [orderId], references: [id])
+  action      String   @db.VarChar(255)
+  timestamp   DateTime @default(now()) @db.Date
+
+  @@map("order_histories")
+}
+
+model SaleHistory {
+  id          String   @id @default(uuid()) @db.VarChar(36)
+  alternateId Int      @unique @db.Integer
+  createdAt   DateTime @default(now()) @db.Date
+  saleId      String   @db.VarChar(36)
+  sale        Sale     @relation(fields: [saleId], references: [id])
+  action      String   @db.VarChar(255)
+  timestamp   DateTime @default(now()) @db.Date
+
+  @@map("sale_histories")
 }

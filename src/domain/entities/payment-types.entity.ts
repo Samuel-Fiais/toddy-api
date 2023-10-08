@@ -1,8 +1,9 @@
-import { Base } from "./base.entity"
-import { Sale } from "./sale.entity"
+import { BaseEntity } from "./base.entity";
+import { Sale } from "./sale.entity";
 
-export class PaymentType extends Base {
-	description: string
+export class PaymentType extends BaseEntity {
+  description: string;
 
-	sale: Sale
+  saleId: string;
+  sale: Sale;
 }

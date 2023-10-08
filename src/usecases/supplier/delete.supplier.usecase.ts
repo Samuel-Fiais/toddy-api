@@ -1,27 +1,50 @@
-import { Injectable } from '@nestjs/common'
-import { SupplierRepository } from 'src/infra/repositories/supplier.repository'
-import { ExceptionService } from 'src/infra/exceptions/exception.service'
-import { LoggerService } from 'src/infra/logger/logger.service'
-import { ValidationUtils } from 'src/infra/common/utils/validation.utils'
+import { Injectable } from "@nestjs/common";
+import { SupplierRepository } from "src/infra/repositories/supplier.repository";
+import { ValidationUtils } from "src/infra/common/utils/validation.utils";
+import { ILogger } from "src/domain/logger/logger.interface";
+import { IException } from "src/domain/exceptions/exceptions.interface";
 
 @Injectable()
 export class DeleteSupplierUseCase {
-	constructor(protected _logger: LoggerService, private readonly _supplierRepository: SupplierRepository) {}
+  constructor(
+    private readonly _logger: ILogger,
+    private readonly _supplierRepository: SupplierRepository,
+    private readonly _exceptionService: IException,
+  ) {}
 
-	async execute(id: string): Promise<boolean> {
-		this._logger.log('RemoveSupplierUseCase remove', 'Start to remove supplier by id')
+  async execute(id: string): Promise<boolean> {
+    try {
+      this._logger.log(
+        "RemoveSupplierUseCase remove",
+        `Start to remove supplier by id ${id}`,
+      );
 
-		const hasErrorValidation = await ValidationUtils.validateIdParam(id)
-		
-		if (hasErrorValidation) new ExceptionService().applicationValuesRequisitionInvalid('Fornecedor', hasErrorValidation)
+      const hasErrorValidation = await ValidationUtils.validateIdParam(id);
 
-		const entity = await this._supplierRepository.findById(id)
-		if (!entity) new ExceptionService().applicationNotFound('suppliers', id)
-		
-		const isEntityRemoved = await this._supplierRepository.delete(id)
+      if (hasErrorValidation)
+        this._exceptionService.applicationValuesRequisitionInvalid(
+          "Fornecedor",
+          hasErrorValidation,
+        );
 
-		this._logger.log('RemoveSupplierUseCase execute', 'Removing supplier by id was successful')
+      const entity = await this._supplierRepository.findById(id);
+      if (!entity) this._exceptionService.applicationNotFound("suppliers", id);
 
-		return isEntityRemoved
-	}
+      const isEntityRemoved = await this._supplierRepository.delete(id);
+
+      this._logger.log(
+        "RemoveSupplierUseCase execute",
+        "Removing supplier by id was successful",
+      );
+
+      return isEntityRemoved;
+    } catch (e) {
+      this._logger.error(
+        "RemoveSupplierUseCase execute",
+        "Error when try to remove a supplier",
+      );
+      if (e as IException) throw e;
+      this._exceptionService.applicationOperationDeleteRepository("Fornecedor");
+    }
+  }
 }

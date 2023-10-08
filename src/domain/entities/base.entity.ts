@@ -1,5 +1,5 @@
-﻿export class Base {
-  id: string
-  alternateId: number
-  createdAt: Date
+﻿export class BaseEntity {
+  id: string;
+  alternateId: number;
+  createdAt: Date;
 }

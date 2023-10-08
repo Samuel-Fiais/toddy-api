@@ -1,36 +1,60 @@
-import { Injectable } from '@nestjs/common'
-import { SupplierRepository } from 'src/infra/repositories/supplier.repository'
-import { UpdateSupplierDTO } from '../models/dtos/supplier.dto'
-import { ExceptionService } from 'src/infra/exceptions/exception.service'
-import { LoggerService } from 'src/infra/logger/logger.service'
-import { ValidationUtils } from 'src/infra/common/utils/validation.utils'
-import { updateSupplierSchema } from '../models/schemas/supplier.schemas'
+import { Injectable } from "@nestjs/common";
+import { SupplierRepository } from "src/infra/repositories/supplier.repository";
+import { UpdateSupplierDTO } from "../models/dtos/supplier.dto";
+import { ValidationUtils } from "src/infra/common/utils/validation.utils";
+import { updateSupplierSchema } from "../models/schemas/supplier.schemas";
+import { ILogger } from "src/domain/logger/logger.interface";
+import { IException } from "src/domain/exceptions/exceptions.interface";
 
 @Injectable()
 export class UpdateSupplierUseCase {
-	constructor(protected _logger: LoggerService, private readonly _supplierRepository: SupplierRepository) {}
+  constructor(
+    private readonly _logger: ILogger,
+    private readonly _supplierRepository: SupplierRepository,
+    private readonly _exceptionService: IException,
+  ) {}
 
-	async execute(model: UpdateSupplierDTO): Promise<boolean> {
-		this._logger.log('UpdateSupplierUseCase execute', 'Start to update a supplier')
-		
-		const validation = new ValidationUtils<UpdateSupplierDTO>(updateSupplierSchema)
-		const hasError = await validation.validateSchema(model)
-		
-		if (hasError) new ExceptionService().applicationValuesRequisitionInvalid('Fornecedor', hasError)
-		await this.validateSupplierExists(model.id)
+  async execute(model: UpdateSupplierDTO): Promise<boolean> {
+    try {
+      this._logger.log(
+        "UpdateSupplierUseCase execute",
+        `Start to update a supplier by id ${model.id}`,
+      );
 
-		const entity = UpdateSupplierDTO.mapper(model)
+      const validation = new ValidationUtils<UpdateSupplierDTO>(
+        updateSupplierSchema,
+      );
+      const hasError = await validation.validateSchema(model);
 
-		const isSupplierUpdated = await this._supplierRepository.update(entity)
+      if (hasError)
+        this._exceptionService.applicationValuesRequisitionInvalid(
+          "Fornecedor",
+          hasError,
+        );
+      await this._validateSupplierExists(model.id);
+      const entity = UpdateSupplierDTO.mapper(model);
+      const isSupplierUpdated = await this._supplierRepository.update(entity);
 
-		this._logger.log('UpdateSupplierUseCase execute', 'Supplier have be updated')
+      this._logger.log(
+        "UpdateSupplierUseCase execute",
+        "Supplier have be updated",
+      );
 
-		return isSupplierUpdated
-	}
+      return isSupplierUpdated;
+    } catch (e) {
+      this._logger.error(
+        "UpdateSupplierUseCase execute",
+        "Error when try to update a supplier",
+      );
+      if (e as IException) throw e;
+      this._exceptionService.applicationOperationUpdateRepository("Fornecedor");
+    }
+  }
 
-	async validateSupplierExists(id: string) {
-		const supplierExists = await this._supplierRepository.findById(id)
+  async _validateSupplierExists(id: string) {
+    const supplierExists = await this._supplierRepository.findById(id);
 
-		if (!supplierExists) new ExceptionService().applicationNotFound('suppliers', id)
-	}
+    if (!supplierExists)
+      this._exceptionService.applicationNotFound("suppliers", id);
+  }
 }

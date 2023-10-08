@@ -1,14 +1,16 @@
-import { Base } from "./base.entity"
-import { SaleItem } from "@prisma/client"
-import { PaymentType } from "./payment-types.entity"
+import { BaseEntity } from "./base.entity";
+import { SaleItem } from "@prisma/client";
+import { PaymentType } from "./payment-types.entity";
+import { SaleHistory } from "./history.entity";
 
-export class Sale extends Base {
-	quantity: number
-	totalValue: number
-	cardDiscount: number
-	
-	paymentId: string
-	payment: PaymentType
+export class Sale extends BaseEntity {
+  quantity: number;
+  totalValue: number;
+  cardDiscount: number;
 
-	saleItems: SaleItem[]
+  paymentTypeId: string;
+  payment: PaymentType;
+
+  saleItems: SaleItem[];
+  saleHistories: SaleHistory[];
 }

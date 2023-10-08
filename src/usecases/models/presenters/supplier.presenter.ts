@@ -1,38 +1,40 @@
-import { Supplier } from "src/domain/entities/supplier.entity"
-import { GetProductPresenter } from "./product.presenter"
+import { Supplier } from "src/domain/entities/supplier.entity";
+import { GetProductPresenter as ProductPresenter } from "./product.presenter";
 
-export class GetSupplierPresenter {
-	id: string
-	alternateId: number
-	createdAt: Date
-	document: string
-	tradeName: string
-	companyName: string
-	phone: string
-	email: string
+export class SupplierPresenter {
+  id: string;
+  alternateId: number;
+  createdAt: Date;
+  document: string;
+  tradeName: string;
+  companyName: string;
+  phone: string;
+  email: string;
 
-	products: GetProductPresenter[]
+  products: ProductPresenter[];
 
-	static mapper = (entity: Supplier) => {
-		const model = new GetSupplierPresenter()
-		model.id = entity.id
-		model.alternateId = entity.alternateId
-		model.createdAt = entity.createdAt
-		model.document = entity.document
-		model.tradeName = entity.tradeName
-		model.companyName = entity.companyName
-		model.phone = entity.phone
-		model.email = entity.email
+  static mapper = (entity: Supplier) => {
+    const model = new SupplierPresenter();
+    model.id = entity.id;
+    model.alternateId = entity.alternateId;
+    model.createdAt = entity.createdAt;
+    model.document = entity.document;
+    model.tradeName = entity.tradeName;
+    model.companyName = entity.companyName;
+    model.phone = entity.phone;
+    model.email = entity.email;
 
-		model.products = entity.products
+    model.products = entity.products;
 
-		return model
-	}
+    return model;
+  };
 
-	static mapperArray(entities: Array<Supplier>) {
-		const models = new Array<GetSupplierPresenter>()
-		entities.forEach(entity => models.push(GetSupplierPresenter.mapper(entity)))
+  static mapperArray(entities: Array<Supplier>) {
+    const models = new Array<SupplierPresenter>();
+    entities.forEach((entity) =>
+      models.push(SupplierPresenter.mapper(entity)),
+    );
 
-		return models
-	}
+    return models;
+  }
 }
