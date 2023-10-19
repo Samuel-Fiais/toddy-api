@@ -8,6 +8,8 @@ import { AuthController } from "./auth/auth.controller";
 import { UseCaseProxyAuthModule } from "../usecases-proxy/usecases-proxy.auth.module";
 import { UseCaseProxyUserModule } from "../usecases-proxy/usecases-proxy.user.module";
 import { UserController } from "./user/user.controller";
+import { JwtModule } from "@nestjs/jwt";
+import { GuardsModule } from "../common/guards/guard.module";
 
 @Module({
   imports: [
@@ -15,6 +17,11 @@ import { UserController } from "./user/user.controller";
     UseCaseProxyCompanyInfoModule.register(),
     UseCaseProxyAuthModule.register(),
     UseCaseProxyUserModule.register(),
+    JwtModule.register({
+      secret: process.env.JWT_SECRET,
+      signOptions: { expiresIn: "1h" },
+    }),
+    GuardsModule,
   ],
   controllers: [
     SupplierController,

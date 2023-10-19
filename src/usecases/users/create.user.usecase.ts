@@ -7,7 +7,7 @@ import { UserPresenter } from "../models/presenters/user.presenter";
 import { createUserSchema } from "../models/schemas/user.schemas";
 import { UserRepository } from "src/infra/repositories/user.repository";
 
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from "bcrypt";
 
 @Injectable()
 export class CreateUserUseCase {
@@ -24,9 +24,7 @@ export class CreateUserUseCase {
         "Start to create a new user",
       );
 
-      const validation = new ValidationUtils<CreateUserDTO>(
-        createUserSchema,
-      );
+      const validation = new ValidationUtils<CreateUserDTO>(createUserSchema);
       const hasError = await validation.validateSchema(model);
 
       if (hasError)
@@ -41,12 +39,14 @@ export class CreateUserUseCase {
       entity.password = await this._hashPassword(entity.password);
       const userInserted = await this._userRepository.create(entity);
 
+      const user = UserPresenter.mapper(userInserted);
+
       this._logger.log(
         "CreateUserUseCase execute",
-        `New user have be inserted - ID ${userInserted.id}`,
+        `New user have be inserted - ID ${user.id}`,
       );
 
-      return userInserted;
+      return user;
     } catch (e) {
       this._logger.error(
         "CreateUserUseCase execute",
@@ -70,7 +70,9 @@ export class CreateUserUseCase {
       this._exceptionService.applicationExistingRegister(["Username"]);
     }
 
-    const emailExists = await this._userRepository.find((f) => f.email == email);
+    const emailExists = await this._userRepository.find(
+      (f) => f.email == email,
+    );
 
     if (emailExists.length > 0) {
       this._logger.warn(

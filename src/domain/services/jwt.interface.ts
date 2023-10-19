@@ -1,5 +1,9 @@
 export interface IJwtServicePayload {
+  userId: string;
   username: string;
+  email: string;
+  dateExpire: Date;
+  permissions: string[];
 }
 
 export interface IJwtService {

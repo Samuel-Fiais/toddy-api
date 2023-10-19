@@ -1,4 +1,4 @@
-export class Permissions {
+export class PermissionsEnum {
   static STORES_CREATE = "STORES_CREATE";
   static STORES_READ = "STORES_READ";
   static STORES_UPDATE = "STORES_UPDATE";
@@ -48,9 +48,11 @@ export class Permissions {
   static EMPLOYEES_READ = "EMPLOYEES_READ";
   static EMPLOYEES_UPDATE = "EMPLOYEES_UPDATE";
   static EMPLOYEES_DELETE = "EMPLOYEES_DELETE";
-  
+
   static USERS_CREATE = "USERS_CREATE";
   static USERS_READ = "USERS_READ";
   static USERS_UPDATE = "USERS_UPDATE";
   static USERS_DELETE = "USERS_DELETE";
+
+  static NONE = "";
 }

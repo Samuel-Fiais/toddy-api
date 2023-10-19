@@ -31,9 +31,7 @@ export class SupplierPresenter {
 
   static mapperArray(entities: Array<Supplier>) {
     const models = new Array<SupplierPresenter>();
-    entities.forEach((entity) =>
-      models.push(SupplierPresenter.mapper(entity)),
-    );
+    entities.forEach((entity) => models.push(SupplierPresenter.mapper(entity)));
 
     return models;
   }

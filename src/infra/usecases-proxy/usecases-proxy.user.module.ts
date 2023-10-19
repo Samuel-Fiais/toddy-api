@@ -12,7 +12,7 @@ import { RepositoriesModule } from "../repositories/repositories.module";
   imports: [LoggerModule, ExceptionsModule, RepositoriesModule],
 })
 export class UseCaseProxyUserModule {
-  static CREATE_USER_USECASE_PROXY = "CREATE_USER_USECASE_PROXY"
+  static CREATE_USER_USECASE_PROXY = "CREATE_USER_USECASE_PROXY";
 
   static register(): DynamicModule {
     return {
@@ -21,8 +21,14 @@ export class UseCaseProxyUserModule {
         {
           inject: [LoggerService, UserRepository, ExceptionService],
           provide: UseCaseProxyUserModule.CREATE_USER_USECASE_PROXY,
-          useFactory: (logger: LoggerService, userRepository: UserRepository, exceptionService: ExceptionService) =>
-            new UseCaseProxy(new CreateUserUseCase(logger, userRepository, exceptionService)),
+          useFactory: (
+            logger: LoggerService,
+            userRepository: UserRepository,
+            exceptionService: ExceptionService,
+          ) =>
+            new UseCaseProxy(
+              new CreateUserUseCase(logger, userRepository, exceptionService),
+            ),
         },
       ],
       exports: [UseCaseProxyUserModule.CREATE_USER_USECASE_PROXY],

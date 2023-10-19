@@ -20,6 +20,8 @@ import { GetByIdSupplierUseCase } from "../../../usecases/supplier/get-by-id.sup
 import { UpdateSupplierUseCase } from "src/usecases/supplier/update.supplier.usecase";
 import { DeleteSupplierUseCase } from "src/usecases/supplier/delete.supplier.usecase";
 import { ApiTags } from "@nestjs/swagger";
+import { PermissionsEnum } from "src/infra/enums/permission.enum";
+import { Permission } from "src/infra/common/decorators/permission.decorator";
 
 @Controller("supplier")
 @ApiTags("supplier")
@@ -37,26 +39,31 @@ export class SupplierController {
     private readonly deleteSupplierUsecaseProxy: UseCaseProxy<DeleteSupplierUseCase>,
   ) {}
 
+  @Permission(PermissionsEnum.SUPPLIERS_READ)
   @Get()
   async findAll() {
     return await this.getAllSupplierUsecaseProxy.getInstance().execute();
   }
 
+  @Permission(PermissionsEnum.SUPPLIERS_READ)
   @Get(":id")
   async findById(@Param("id") id: string) {
     return await this.getByIdSupplierUseCaseProxy.getInstance().execute(id);
   }
 
+  @Permission(PermissionsEnum.SUPPLIERS_CREATE)
   @Post()
   async create(@Body() model: CreateSupplierDTO) {
     return await this.createSupplierUsecaseProxy.getInstance().execute(model);
   }
 
+  @Permission(PermissionsEnum.SUPPLIERS_UPDATE)
   @Put()
   async update(@Body() model: UpdateSupplierDTO) {
     return await this.updateSupplierUsecaseProxy.getInstance().execute(model);
   }
 
+  @Permission(PermissionsEnum.SUPPLIERS_DELETE)
   @Delete(":id")
   async delete(@Param("id") id: string) {
     return await this.deleteSupplierUsecaseProxy.getInstance().execute(id);

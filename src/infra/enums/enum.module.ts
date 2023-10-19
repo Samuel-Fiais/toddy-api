@@ -1,8 +1,8 @@
 import { Module } from "@nestjs/common";
-import { Permissions } from "./permission.enum";
+import { PermissionsEnum } from "./permission.enum";
 
 @Module({
-  providers: [Permissions],
-  exports: [Permissions],
+  providers: [PermissionsEnum],
+  exports: [PermissionsEnum],
 })
 export class EnumModule {}

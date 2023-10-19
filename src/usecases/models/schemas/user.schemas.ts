@@ -1,4 +1,4 @@
-import * as yup from "yup"
+import * as yup from "yup";
 
 export const createUserSchema: yup.Schema = yup.object({
   username: yup
@@ -15,4 +15,4 @@ export const createUserSchema: yup.Schema = yup.object({
     .string()
     .required("O campo SENHA é obrigatório.\n")
     .min(8, "O campo SENHA deve ter mais de 7 caracteres.\n"),
-})
+});

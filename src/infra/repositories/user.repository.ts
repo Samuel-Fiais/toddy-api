@@ -19,12 +19,14 @@ export class UserRepository
 
   async findByUsername(username: string): Promise<User> {
     try {
-      return  await this.prisma.user.findFirst({
+      return await this.prisma.user.findFirst({
         where: {
           username,
         },
+        include: {
+          permissions: true,
+        },
       });
-      
     } catch (e) {
       this.logger.error(
         `UserRepository findByUsername`,

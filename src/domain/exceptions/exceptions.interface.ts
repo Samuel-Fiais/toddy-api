@@ -6,7 +6,7 @@ export interface IException {
 
   applicationInternalServerErrorException();
 
-  applicationNotFound(entity: string, id?: string)
+  applicationNotFound(entity: string, id?: string);
 
   applicationOperationCreateRepository(entity: string);
 

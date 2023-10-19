@@ -6,6 +6,7 @@ import { ValidationUtils } from "src/infra/common/utils/validation.utils";
 import { createSupplierSchema } from "../models/schemas/supplier.schemas";
 import { ILogger } from "../../domain/logger/logger.interface";
 import { IException } from "src/domain/exceptions/exceptions.interface";
+import { SupplierPresenter } from "../models/presenters/supplier.presenter";
 
 @Injectable()
 export class CreateSupplierUseCase {
@@ -15,7 +16,7 @@ export class CreateSupplierUseCase {
     private readonly _exceptionService: IException,
   ) {}
 
-  async execute(model: CreateSupplierDTO): Promise<Supplier> {
+  async execute(model: CreateSupplierDTO): Promise<SupplierPresenter> {
     try {
       this._logger.log(
         "CreateSupplierUseCase execute",
@@ -38,12 +39,14 @@ export class CreateSupplierUseCase {
       const entity = CreateSupplierDTO.mapper(model);
       const supplierInserted = await this._supplierRepository.create(entity);
 
+      const supplier = SupplierPresenter.mapper(supplierInserted);
+
       this._logger.log(
         "CreateSupplierUseCase execute",
-        `New supplier have be inserted - ID ${supplierInserted.id}`,
+        `New supplier have be inserted - ID ${supplier.id}`,
       );
 
-      return supplierInserted;
+      return supplier;
     } catch (e) {
       this._logger.error(
         "CreateSupplierUseCase execute",

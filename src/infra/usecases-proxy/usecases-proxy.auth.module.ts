@@ -18,7 +18,7 @@ import { BcryptModule } from "../services/bcrypt/bcrypt.module";
     RepositoriesModule,
     ExceptionsModule,
     JwtModule,
-    BcryptModule
+    BcryptModule,
   ],
 })
 export class UseCaseProxyAuthModule {
@@ -29,10 +29,30 @@ export class UseCaseProxyAuthModule {
       module: UseCaseProxyAuthModule,
       providers: [
         {
-          inject: [LoggerService, UserRepository, ExceptionService, JwtTokenService, BcryptService],
+          inject: [
+            LoggerService,
+            UserRepository,
+            ExceptionService,
+            JwtTokenService,
+            BcryptService,
+          ],
           provide: UseCaseProxyAuthModule.LOGIN_USE_CASE_PROXY,
-          useFactory: (logger: LoggerService,  userRepository: UserRepository, jwtService: JwtTokenService, bcryptService: BcryptService, exceptionService: ExceptionService) =>
-            new UseCaseProxy(new LoginUseCase(logger, userRepository, jwtService, bcryptService, exceptionService)),
+          useFactory: (
+            logger: LoggerService,
+            userRepository: UserRepository,
+            exceptionService: ExceptionService,
+            jwtService: JwtTokenService,
+            bcryptService: BcryptService,
+          ) =>
+            new UseCaseProxy(
+              new LoginUseCase(
+                logger,
+                userRepository,
+                exceptionService,
+                jwtService,
+                bcryptService,
+              ),
+            ),
         },
       ],
       exports: [UseCaseProxyAuthModule.LOGIN_USE_CASE_PROXY],

@@ -20,8 +20,8 @@ export class GetAllSupplierUseCase {
       );
 
       const entities = await this._supplierRepository.findAll();
-      let presenters = SupplierPresenter.mapperArray(entities).sort(
-        (a, b) => (a.alternateId > b.alternateId ? 1 : -1),
+      let presenters = SupplierPresenter.mapperArray(entities).sort((a, b) =>
+        a.alternateId > b.alternateId ? 1 : -1,
       );
 
       if (!(presenters.length > 0))

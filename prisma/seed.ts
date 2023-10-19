@@ -24,10 +24,10 @@ async function main() {
   let lastAlternateId = lastPermission ? lastPermission.alternateId : 0;
 
   for (let table of tables) {
-      try {
+    try {
       const tableName = table.table_name;
       const permissionName = tableName.toUpperCase();
-  
+
       for (let typePermission of typePermissions) {
         lastAlternateId++;
         const permission: Permission = {
@@ -36,20 +36,37 @@ async function main() {
           createdAt: new Date(),
           id: uuidv4(),
         };
-  
+
         await prisma.permission.create({
           data: permission,
         });
-  
+
         console.log(
           `Created permission for table: ${tableName} with type: ${typePermission}`,
         );
       }
-  
+
       console.log(`Created permission for table: ${tableName}`);
     } catch (e) {
-      continue
+      continue;
     }
+  }
+
+  const user = await prisma.user.findUnique({
+    where: { id: "5681b32f-5155-453e-b004-d182e07e955f" },
+  });
+
+  if (user) {
+    const permissions = await prisma.permission.findMany();
+
+    await prisma.user.update({
+      where: { id: "5681b32f-5155-453e-b004-d182e07e955f" },
+      data: {
+        permissions: {
+          connect: permissions,
+        },
+      },
+    });
   }
 
   await prisma.$disconnect();

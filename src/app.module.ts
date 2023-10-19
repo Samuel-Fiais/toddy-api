@@ -3,11 +3,10 @@ import { PrismaService } from "./infra/database/prisma.service";
 import { ControllersModule } from "./infra/controllers/controller.module";
 import { RepositoriesModule } from "./infra/repositories/repositories.module";
 import { BcryptModule } from "./infra/services/bcrypt/bcrypt.module";
-import { UseCaseProxyAuthModule } from "./infra/usecases-proxy/usecases-proxy.auth.module";
+// import { UseCaseProxyAuthModule } from "./infra/usecases-proxy/usecases-proxy.auth.module";
 import { UseCaseProxyCompanyInfoModule } from "./infra/usecases-proxy/usecases-proxy.company-info.module";
 import { UseCaseProxySupplierModule } from "./infra/usecases-proxy/usecases-proxy.supplier.module";
 import { UseCaseProxyUserModule } from "./infra/usecases-proxy/usecases-proxy.user.module";
-import { JwtModule as JwtServiceModule } from "./infra/services/jwt/jwt.module";
 import { JwtModule } from "@nestjs/jwt";
 
 @Module({
@@ -19,9 +18,8 @@ import { JwtModule } from "@nestjs/jwt";
       secret: process.env.JWT_SECRET,
     }),
     BcryptModule,
-    JwtServiceModule,
 
-    UseCaseProxyAuthModule.register(),
+    // UseCaseProxyAuthModule.register(),
     UseCaseProxyCompanyInfoModule.register(),
     UseCaseProxySupplierModule.register(),
     UseCaseProxyUserModule.register(),

@@ -20,9 +20,7 @@ export class UserPresenter {
 
   static mapperArray(entities: Array<User>) {
     const models = new Array<UserPresenter>();
-    entities.forEach((entity) =>
-      models.push(UserPresenter.mapper(entity)),
-    );
+    entities.forEach((entity) => models.push(UserPresenter.mapper(entity)));
 
     return models;
   }
