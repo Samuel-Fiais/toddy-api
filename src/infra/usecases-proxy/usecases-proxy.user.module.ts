@@ -3,7 +3,7 @@ import { LoggerModule } from "../logger/logger.module";
 import { ExceptionsModule } from "../exceptions/exception.module";
 import { UseCaseProxy } from "./usecases-proxy";
 import { LoggerService } from "../logger/logger.service";
-import { CreateUserUseCase } from "src/usecases/users/create.user.usecase";
+import { CreateUserUseCase } from "src/usecases/user/create.user.usecase";
 import { UserRepository } from "../repositories/user.repository";
 import { ExceptionService } from "../exceptions/exception.service";
 import { RepositoriesModule } from "../repositories/repositories.module";

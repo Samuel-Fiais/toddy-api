@@ -5,7 +5,7 @@ import { ValidationUtils } from "src/infra/common/utils/validation.utils";
 import { CreateUserDTO } from "../models/dtos/user.dto";
 import { UserPresenter } from "../models/presenters/user.presenter";
 import { createUserSchema } from "../models/schemas/user.schemas";
-import { UserRepository } from "src/infra/repositories/user.repository";
+import { IUserRepository } from 'src/domain/repositories/user.repository.interface';
 
 import * as bcrypt from "bcrypt";
 
@@ -13,7 +13,7 @@ import * as bcrypt from "bcrypt";
 export class CreateUserUseCase {
   constructor(
     private readonly _logger: LoggerService,
-    private readonly _userRepository: UserRepository,
+    private readonly _userRepository: IUserRepository,
     private readonly _exceptionService: ExceptionService,
   ) {}
 

@@ -5,7 +5,7 @@ import {
   IJwtServicePayload,
 } from "src/domain/services/jwt.interface";
 import { ILogger } from "src/domain/logger/logger.interface";
-import { IUserRepositoryInterface } from "src/domain/repositories/user.repository.interface";
+import { IUserRepository } from "src/domain/repositories/user.repository.interface";
 import { IException } from "src/domain/exceptions/exceptions.interface";
 import { IBcryptService } from "src/domain/services/bcrypt.interface";
 import { User } from "src/domain/entities/user.entity";
@@ -14,7 +14,7 @@ import { User } from "src/domain/entities/user.entity";
 export class LoginUseCase {
   constructor(
     private readonly _logger: ILogger,
-    private readonly _usersService: IUserRepositoryInterface,
+    private readonly _usersService: IUserRepository,
     private readonly _exceptionService: IException,
     private readonly _jwtService: IJwtService,
     private readonly _bcryptService: IBcryptService,
@@ -26,7 +26,12 @@ export class LoginUseCase {
     try {
       this._logger.log("LoginUseCase execute", "Start to login");
 
-      const user = await this._usersService.findByUsername(model.username);
+      const user = await this._usersService.find(
+        (u) => u.username === model.username,
+        {
+          permissions: true,
+        }
+      ).then((u) => u[0]);
       if (!user) this._exceptionService.applicationUnauthorizedException();
 
       const areEqual = await this._bcryptService.compare(

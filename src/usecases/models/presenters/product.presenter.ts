@@ -10,6 +10,7 @@ export class GetProductPresenter {
   inventoryId: string;
 
   static mapper = (entity: Product) => {
+    if (!entity) return null;
     const model = new GetProductPresenter();
     model.id = entity.id;
     model.alternateId = entity.alternateId;
@@ -23,6 +24,7 @@ export class GetProductPresenter {
   };
 
   static mapperArray(entities: Array<Product>) {
+    if (!entities) return null;
     const models = new Array<GetProductPresenter>();
     entities.forEach((entity) =>
       models.push(GetProductPresenter.mapper(entity)),

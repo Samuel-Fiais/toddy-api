@@ -1,5 +1,5 @@
 import { BaseEntity } from "./base.entity";
-import { Employee } from "./employee.item.entity";
+import { Employee } from "./employee.entity";
 import { Permission } from "./permission.entity";
 import { UserHistory } from "./history.entity";
 

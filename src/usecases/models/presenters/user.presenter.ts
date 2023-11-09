@@ -8,6 +8,7 @@ export class UserPresenter {
   email: string;
 
   static mapper = (entity: User) => {
+    if (!entity) return null;
     const model = new UserPresenter();
     model.id = entity.id;
     model.alternateId = entity.alternateId;
@@ -19,6 +20,7 @@ export class UserPresenter {
   };
 
   static mapperArray(entities: Array<User>) {
+    if (!entities) return null;
     const models = new Array<UserPresenter>();
     entities.forEach((entity) => models.push(UserPresenter.mapper(entity)));
 

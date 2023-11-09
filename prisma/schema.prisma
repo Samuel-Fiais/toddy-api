@@ -131,6 +131,9 @@ model Store {
   createdAt   DateTime   @default(now()) @db.Date
   name        String     @unique @db.VarChar(255)
   address     String     @db.VarChar(255)
+  document    String?    @unique @db.VarChar(14)
+  logo        String?    @db.VarChar
+  active      Boolean    @default(true)
   employees   Employee[]
   suppliers   Supplier[]
 

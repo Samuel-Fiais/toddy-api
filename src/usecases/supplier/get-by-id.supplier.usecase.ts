@@ -29,7 +29,7 @@ export class GetByIdSupplierUseCase {
           hasErrorValidation,
         );
 
-      const entity = await this._supplierRepository.findById(id, ["products"]);
+      const entity = await this._supplierRepository.findById(id);
       if (!entity) this._exceptionService.applicationNotFound("suppliers", id);
 
       const presenter = SupplierPresenter.mapper(entity);

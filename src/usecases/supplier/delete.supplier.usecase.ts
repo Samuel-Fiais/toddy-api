@@ -1,14 +1,14 @@
 import { Injectable } from "@nestjs/common";
-import { SupplierRepository } from "src/infra/repositories/supplier.repository";
 import { ValidationUtils } from "src/infra/common/utils/validation.utils";
 import { ILogger } from "src/domain/logger/logger.interface";
 import { IException } from "src/domain/exceptions/exceptions.interface";
+import { ISupplierRepository } from 'src/domain/repositories/supplier.repository.interface';
 
 @Injectable()
 export class DeleteSupplierUseCase {
   constructor(
     private readonly _logger: ILogger,
-    private readonly _supplierRepository: SupplierRepository,
+    private readonly _supplierRepository: ISupplierRepository,
     private readonly _exceptionService: IException,
   ) {}
 

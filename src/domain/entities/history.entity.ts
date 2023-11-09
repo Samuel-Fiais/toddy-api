@@ -1,5 +1,5 @@
 import { BaseEntity } from "./base.entity";
-import { Employee } from "./employee.item.entity";
+import { Employee } from "./employee.entity";
 import { Order } from "./order.entity";
 import { Product } from "./product.entity";
 import { Sale } from "./sale.entity";

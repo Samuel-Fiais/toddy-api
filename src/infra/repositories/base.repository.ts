@@ -9,6 +9,7 @@ export class BaseRepository<T> implements IBaseRepository<T> {
     private readonly _prisma: PrismaService,
     private readonly _modelName: string,
     private readonly _logger: LoggerService,
+    private readonly _exceptionService: ExceptionService,
   ) {}
 
   async create(entity: T): Promise<T> {
@@ -31,7 +32,7 @@ export class BaseRepository<T> implements IBaseRepository<T> {
         `Error to create a new ${this._modelName}`,
         e,
       );
-      new ExceptionService().applicationOperationCreateRepository(
+      this._exceptionService.applicationOperationCreateRepository(
         this._modelName,
       );
     }
@@ -51,7 +52,7 @@ export class BaseRepository<T> implements IBaseRepository<T> {
         `Error to update a ${this._modelName}`,
         e,
       );
-      new ExceptionService().applicationOperationUpdateRepository(
+      this._exceptionService.applicationOperationUpdateRepository(
         this._modelName,
       );
     }
@@ -68,56 +69,63 @@ export class BaseRepository<T> implements IBaseRepository<T> {
         `Error to delete a ${this._modelName}`,
         e,
       );
-      new ExceptionService().applicationOperationDeleteRepository(
+      this._exceptionService.applicationOperationDeleteRepository(
         this._modelName,
       );
     }
   }
 
-  async findAll(): Promise<T[]> {
+  async findAll(include?: any): Promise<T[]> {
     try {
-      return await this._prisma[this._modelName].findMany();
+      return await this._prisma[this._modelName].findMany({
+        include: include ?? {},
+      });
     } catch (e) {
       this._logger.error(
         `BaseRepository<${this._modelName}> findAll`,
         `Error to find all ${this._modelName}`,
         e,
       );
-      new ExceptionService().applicationOperationFindRepository(
+      this._exceptionService.applicationOperationFindRepository(
         this._modelName,
       );
     }
   }
 
-  async findById(id: string, includeRelations?: string[]): Promise<T> {
+  async findById(id: string, include?: any): Promise<T> {
     try {
-      const query = {
+      return await this._prisma[this._modelName].findUnique({
         where: { id },
-      };
-
-      if (includeRelations && includeRelations.length > 0) {
-        query["include"] = {};
-        includeRelations.forEach((relation) => {
-          query["include"][relation] = true;
-        });
-      }
-
-      return await this._prisma[this._modelName].findUnique(query);
+        include: include ?? {},
+      });
     } catch (e) {
       this._logger.error(
         `BaseRepository<${this._modelName}> findById`,
         `Error to find a ${this._modelName} by id`,
         e,
       );
-      new ExceptionService().applicationOperationFindRepository(
+      this._exceptionService.applicationOperationFindRepository(
         this._modelName,
       );
     }
   }
 
-  async find(filter: (item: T) => boolean): Promise<T[]> {
-    const entities = await this._prisma[this._modelName].findMany();
+  async find(filter: (item: T) => boolean, include?: any): Promise<T[]> {
+    try {
+      const entities = await this._prisma[this._modelName].findMany({
+        include: include ?? {},
+      });
 
-    return entities.filter(filter);
+      return entities.filter(filter);
+    } catch (e) {
+      this._logger.error(
+        `BaseRepository<${this._modelName}> find`,
+        `Error to find a ${this._modelName}`,
+        e,
+      );
+      this._exceptionService.applicationOperationFindRepository(
+        this._modelName,
+      );
+    }
   }
 }

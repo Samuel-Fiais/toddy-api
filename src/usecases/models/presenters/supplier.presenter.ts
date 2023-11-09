@@ -14,6 +14,7 @@ export class SupplierPresenter {
   products: ProductPresenter[];
 
   static mapper = (entity: Supplier) => {
+    if (!entity) return null;
     const model = new SupplierPresenter();
     model.id = entity.id;
     model.alternateId = entity.alternateId;
@@ -30,6 +31,7 @@ export class SupplierPresenter {
   };
 
   static mapperArray(entities: Array<Supplier>) {
+    if (!entities) return null;
     const models = new Array<SupplierPresenter>();
     entities.forEach((entity) => models.push(SupplierPresenter.mapper(entity)));
 

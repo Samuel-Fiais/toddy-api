@@ -107,6 +107,8 @@ CREATE TABLE "stores" (
     "createdAt" DATE NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "name" VARCHAR(255) NOT NULL,
     "address" VARCHAR(255) NOT NULL,
+    "document" VARCHAR(14),
+    "logo" VARCHAR,
 
     CONSTRAINT "stores_pkey" PRIMARY KEY ("id")
 );
@@ -261,6 +263,9 @@ CREATE UNIQUE INDEX "stores_alternateId_key" ON "stores"("alternateId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "stores_name_key" ON "stores"("name");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "stores_document_key" ON "stores"("document");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "users_alternateId_key" ON "users"("alternateId");

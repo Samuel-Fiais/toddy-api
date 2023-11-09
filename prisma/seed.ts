@@ -53,14 +53,14 @@ async function main() {
   }
 
   const user = await prisma.user.findUnique({
-    where: { id: "5681b32f-5155-453e-b004-d182e07e955f" },
+    where: { id: "20c56374-9a17-4782-8eb0-c09c69c9ba8b" },
   });
 
   if (user) {
     const permissions = await prisma.permission.findMany();
 
     await prisma.user.update({
-      where: { id: "5681b32f-5155-453e-b004-d182e07e955f" },
+      where: { id: "20c56374-9a17-4782-8eb0-c09c69c9ba8b" },
       data: {
         permissions: {
           connect: permissions,
